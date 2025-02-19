@@ -3,19 +3,24 @@ import { Sidebar } from "./Sidebar";
 import { NavbarComponent } from "./Navbar";
 import { useNavigate } from "react-router-dom";
 import { AuthContext } from "../context/AuthContext";
-import {
-  UserCircleIcon,
-  Cog6ToothIcon,
-  PowerIcon
-} from "@heroicons/react/24/solid";
+import { UserCircleIcon, Cog6ToothIcon, PowerIcon } from "@heroicons/react/24/solid";
+import { Spinner } from "@material-tailwind/react";
 
 export function Layout({ children, darkMode, toggleDarkMode, onLogout }) {
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
-  const { user, menuItems } = useContext(AuthContext);
+  const { user, menuItems, isModulesLoaded } = useContext(AuthContext); // Usar isModulesLoaded
   const navigate = useNavigate();
 
   const [openProfileDialog, setOpenProfileDialog] = useState(false);
   const handleOpenProfileDialog = () => setOpenProfileDialog(!openProfileDialog);
+
+  if (!isModulesLoaded) {
+    return (
+      <div className="flex justify-center items-center h-screen">
+        <Spinner className="h-12 w-12" /> {/* Mostrar un spinner mientras se cargan los módulos */}
+      </div>
+    );
+  }
 
   const menuItemsNav = [
     {

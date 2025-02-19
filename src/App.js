@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useContext } from "react";
 import { ThemeProvider } from "@material-tailwind/react";
 import { BrowserRouter as Router, Routes, Route, useNavigate, useLocation, Navigate } from "react-router-dom";
 import ProtectedRoute from "./components/ProtectedRoute";
@@ -7,11 +7,11 @@ import Login from "./page/Login";
 import Dashboard from "./page/Dashboard";
 import Users from "./page/Users";
 import Settings from "./page/Settings";
-import { AuthProvider } from "./context/AuthContext";  // Importar el AuthProvider
+import { AuthProvider, AuthContext } from "./context/AuthContext"; // Importar AuthContext
 
 const App = () => {
   return (
-    <AuthProvider>  {/* Agregar el AuthProvider aquí */}
+    <AuthProvider>
       <Router>
         <AppContent />
       </Router>
@@ -22,6 +22,7 @@ const App = () => {
 const AppContent = () => {
   const navigate = useNavigate();
   const location = useLocation();
+  const { updateToken, clearToken } = useContext(AuthContext); // Usar AuthContext
   const [isAuthenticated, setIsAuthenticated] = useState(!!localStorage.getItem("token"));
   const [darkMode, setDarkMode] = useState(() => {
     return localStorage.getItem("theme") === "dark";
@@ -57,13 +58,13 @@ const AppContent = () => {
   const toggleDarkMode = () => setDarkMode(!darkMode);
 
   const handleLogin = (token) => {
-    localStorage.setItem("token", token);
+    updateToken(token); // Usar updateToken para actualizar el token
     setIsAuthenticated(true);
     navigate("/dashboard", { replace: true });
   };
 
   const handleLogout = () => {
-    localStorage.removeItem("token");
+    clearToken(); // Usar clearToken para eliminar el token
     setIsAuthenticated(false);
     navigate("/login", { replace: true });
   };

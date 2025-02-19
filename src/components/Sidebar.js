@@ -9,17 +9,28 @@ import {
 import { ArrowLeftStartOnRectangleIcon } from "@heroicons/react/24/outline";
 import { useNavigate } from "react-router-dom";
 
-export function Sidebar({ brandName, brandLogo, menuItems, footerContent }) {
-  const LIST_ITEM_STYLES =
-    "text-gray-500 hover:text-white focus:text-white active:text-white hover:bg-opacity-20 focus:bg-opacity-20 active:bg-opacity-20";
-
+export function Sidebar({
+  brandName,
+  brandLogo,
+  menuItems,
+  footerContent,
+  darkMode,
+  onCloseSidebar, // Función para cerrar la barra lateral en modo móvil
+}) {
   const navigate = useNavigate();
 
+  // Estilos condicionales
+  const sidebarBgColor = darkMode ? "bg-gray-900" : "bg-gray-50";
+  const textColor = darkMode ? "text-white" : "text-black";
+  const iconColor = darkMode ? "text-white" : "text-black";
+  const hoverStyles = darkMode
+    ? "hover:bg-opacity-20 hover:text-white"
+    : "hover:bg-gray-300 hover:text-black";
+
   return (
-    <div className="h-screen flex items-center justify-center bg-gray-900">
+    <div className={`h-screen flex items-center justify-center ${sidebarBgColor}`}>
       <Card
-        color="gray"
-        className="h-[calc(100vh-2rem)] w-full max-w-[20rem] p-4 shadow-xl shadow-blue-gray-900/5 flex flex-col"
+        className={`h-[calc(100vh-2rem)] w-full max-w-[20rem] p-4 shadow-xl shadow-blue-gray-900/5 flex flex-col ${sidebarBgColor}`}
       >
         <div className="mb-2 flex items-center gap-4 p-4">
           <img
@@ -27,38 +38,43 @@ export function Sidebar({ brandName, brandLogo, menuItems, footerContent }) {
             alt="brand"
             className="h-9 w-9"
           />
-          <Typography className="text-lg font-bold text-gray-300">
+          <Typography className={`text-lg font-bold ${textColor}`}>
             {brandName}
           </Typography>
         </div>
-        <hr className="my-2 border-gray-800" />
+        <hr className={`my-2 ${darkMode ? "border-gray-800" : "border-gray-200"}`} />
         <List className="flex-1">
           {menuItems.map((item, index) => (
             <ListItem
               key={index}
-              className={LIST_ITEM_STYLES}
-              onClick={() => navigate(item.path)}
+              className={`${textColor} ${hoverStyles} focus:${hoverStyles} active:${hoverStyles}`}
+              onClick={() => {
+                navigate(item.path); // Navegar a la ruta
+                onCloseSidebar(); // Cerrar la barra lateral en modo móvil
+              }}
             >
               <ListItemPrefix>
-                {/* Usar íconos SVG desde la carpeta public/icons */}
                 <img
-                  src={`/icons/${item.icon}`} // Ruta relativa a la carpeta public
+                  src={`/icons/${item.icon}`}
                   alt={item.label}
-                  className="h-5 w-5"
+                  color={iconColor}
+                  className={`h-5 w-5 `}
                 />
               </ListItemPrefix>
               {item.label}
             </ListItem>
           ))}
         </List>
-        <hr className="my-2 border-gray-800" />
+        <hr className={`my-2 ${darkMode ? "border-gray-800" : "border-gray-200"}`} />
         <div className="mt-auto">
           <List>
-            <ListItem className={LIST_ITEM_STYLES}>
+            <ListItem
+              className={`${textColor} ${hoverStyles} focus:${hoverStyles} active:${hoverStyles}`}
+            >
               <ListItemPrefix>
                 <ArrowLeftStartOnRectangleIcon
                   strokeWidth={2.5}
-                  className="h-5 w-5"
+                  className={`h-5 w-5 ${iconColor}`}
                 />
               </ListItemPrefix>
               Sign Out
@@ -66,7 +82,7 @@ export function Sidebar({ brandName, brandLogo, menuItems, footerContent }) {
           </List>
           <Typography
             variant="small"
-            className="mt-5 font-medium text-gray-400 text-right"
+            className={`mt-5 font-medium ${darkMode ? "text-gray-400" : "text-gray-600"} text-right`}
           >
             {footerContent}
           </Typography>

@@ -1,5 +1,4 @@
 import React from "react";
-
 import {
   Navbar,
   Typography,
@@ -15,6 +14,7 @@ import {
   MenuItem,
   MenuList,
 } from "@material-tailwind/react";
+import MaterialTypography from "./MaterialTypography";
 
 export function NavbarComponent({
   brandName,
@@ -23,18 +23,26 @@ export function NavbarComponent({
   menuItems,
   openProfileDialog,
   onToggleProfileDialog,
-  darkMode, // Recibir darkMode
-  toggleDarkMode, // Recibir toggleDarkMode
+  darkMode,
+  toggleDarkMode,
 }) {
-  // ... (resto del código)
+  const navbarColor = darkMode ? "gray" : "";
+  const navClassColor = darkMode ? "from-gray-900 to-gray-800" : "bg-white";
+  const textColor = darkMode ? "text-white" : "text-black";
+  const dropdownColor = darkMode ? "bg-gray-800" : "bg-white";
+  const modalColor = darkMode ? "bg-gray-800" : "bg-white";
 
   return (
-    <Navbar className="sticky top-0 z-10 h-max max-w-full rounded-none px-4 py-2 lg:px-8 lg:py-4">
-      <div className="flex items-center justify-between text-blue-gray-900">
+    <Navbar
+      color={navbarColor}
+      variant="gradient"
+      className={`sticky top-0 z-10 h-max max-w-full rounded-none px-4 py-2 lg:px-8 lg:py-4 ${navClassColor}`}
+    >
+      <div className={`flex items-center justify-between ${textColor}`}>
         <div className="flex items-center">
           <IconButton
             variant="text"
-            className="mr-2 h-6 w-6 text-inherit hover:bg-transparent focus:bg-transparent active:bg-transparent lg:hidden"
+            className={`mr-2 h-6 w-6 hover:bg-transparent focus:bg-transparent active:bg-transparent lg:hidden ${textColor}`}
             ripple={false}
             onClick={onToggleSidebar}
           >
@@ -52,22 +60,21 @@ export function NavbarComponent({
               />
             </svg>
           </IconButton>
-          <Typography
+          <MaterialTypography
             as="a"
             href="#"
-            className="mr-4 cursor-pointer py-1.5 font-medium"
+            className={`mr-4 cursor-pointer py-1.5 font-medium ${textColor}`}
           >
             {brandName}
-          </Typography>
+          </MaterialTypography>
         </div>
         <div className="flex items-center gap-4">
-          {/* Botón para cambiar entre modo oscuro y claro */}
           <IconButton
             variant="text"
-            className="text-inherit hover:bg-transparent focus:bg-transparent active:bg-transparent"
-            onClick={toggleDarkMode} // Usar toggleDarkMode
+            className={`hover:bg-transparent focus:bg-transparent active:bg-transparent ${textColor}`}
+            onClick={toggleDarkMode}
           >
-            {darkMode ? ( // Usar darkMode
+            {darkMode ? (
               <svg
                 xmlns="http://www.w3.org/2000/svg"
                 className="h-6 w-6"
@@ -100,26 +107,26 @@ export function NavbarComponent({
             )}
           </IconButton>
 
-          {/* Avatar con menú desplegable */}
+          {/* Menú desplegable del usuario */}
           <Menu placement="bottom-end">
             <MenuHandler>
               <Button
                 variant="text"
-                color="blue-gray"
-                className="flex items-center rounded-full p-0"
+                className={`flex items-center rounded-full p-0 ${textColor}`}
               >
                 <Avatar
                   variant="circular"
                   size="md"
                   alt={user?.name || "Usuario"}
                   withBorder={true}
-                  color="blue-gray"
                   className="p-0.5"
                   src={user?.avatar || "https://docs.material-tailwind.com/img/face-2.jpg"}
                 />
               </Button>
             </MenuHandler>
-            <MenuList className="p-1">
+            <MenuList
+              className={`p-1 ${dropdownColor} border-0`} // Eliminar el borde
+            >
               {menuItems.map(({ label, icon: Icon, onClick }, key) => {
                 const isLastItem = key === menuItems.length - 1;
                 return (
@@ -130,10 +137,10 @@ export function NavbarComponent({
                       isLastItem
                         ? "hover:bg-red-500/10 focus:bg-red-500/10 active:bg-red-500/10"
                         : ""
-                    }`}
+                    } ${textColor}`} // Aplicar color de texto
                   >
                     <Icon
-                      className={`h-4 w-4 ${isLastItem ? "text-red-500" : ""}`}
+                      className={`h-4 w-4 ${isLastItem ? "text-red-500" : textColor}`}
                       strokeWidth={2}
                     />
                     <Typography
@@ -153,8 +160,12 @@ export function NavbarComponent({
       </div>
 
       {/* Diálogo del perfil */}
-      <Dialog open={openProfileDialog} handler={onToggleProfileDialog}>
-        <DialogHeader>Perfil de usuario</DialogHeader>
+      <Dialog
+        open={openProfileDialog}
+        handler={onToggleProfileDialog}
+        className={modalColor}
+      >
+        <DialogHeader className={textColor}>Perfil de usuario</DialogHeader>
         <DialogBody>
           <div className="flex items-center gap-4">
             <Avatar
@@ -163,11 +174,13 @@ export function NavbarComponent({
               className="h-16 w-16 rounded-full"
             />
             <div>
-              <Typography variant="h6">{user?.name || "Usuario"}</Typography>
-              <Typography variant="small" color="gray" className="font-normal">
+              <Typography variant="h6" className={textColor}>
+                {user?.name || "Usuario"}
+              </Typography>
+              <Typography variant="small" className={`font-normal ${textColor}`}>
                 {user?.email || "usuario@example.com"}
               </Typography>
-              <Typography variant="small" color="gray" className="font-normal">
+              <Typography variant="small" className={`font-normal ${textColor}`}>
                 Profile: {user?.profile || "Usuario"}
               </Typography>
             </div>
