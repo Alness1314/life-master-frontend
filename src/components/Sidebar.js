@@ -20,7 +20,7 @@ export function Sidebar({
   const navigate = useNavigate();
 
   // Estilos condicionales
-  const sidebarBgColor = darkMode ? "bg-gray-900" : "bg-gray-50";
+  const sidebarBgColor = darkMode ? "bg-gray-800" : "bg-white";
   const textColor = darkMode ? "text-white" : "text-black";
   const iconColor = darkMode ? "text-white" : "text-black";
   const hoverStyles = darkMode
@@ -28,9 +28,9 @@ export function Sidebar({
     : "hover:bg-gray-300 hover:text-black";
 
   return (
-    <div className={`h-screen flex items-center justify-center ${sidebarBgColor}`}>
+    <div className={`h-screen flex items-center justify-center bg-white dark:bg-gray-900 shadow-xl shadow-blue-gray-500/10 dark:shadow-blue-gray-500/5 border border-black/15`}>
       <Card
-        className={`h-[calc(100vh-2rem)] w-full max-w-[20rem] p-4 shadow-xl shadow-blue-gray-900/5 flex flex-col ${sidebarBgColor}`}
+        className={`h-[calc(100vh-2rem)] w-full max-w-[20rem] p-4 shadow-xl shadow-blue-gray-900/0 flex flex-col bg-white dark:bg-gray-900`}
       >
         <div className="mb-2 flex items-center gap-4 p-4">
           <img

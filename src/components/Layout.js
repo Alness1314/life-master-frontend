@@ -71,9 +71,10 @@ export function Layout({ children, darkMode, toggleDarkMode, onLogout }) {
               onLogout();
               navigate("/");
             }}
+            onCloseSidebar={false}
           />
         )}
-        <main className="flex-1 p-8 overflow-y-auto bg-white">{children}</main>
+        <main className="flex-1 p-8 overflow-y-auto bg-white dark:bg-gray-900">{children}</main>
       </div>
     </div>
   );

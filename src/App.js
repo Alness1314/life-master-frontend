@@ -8,6 +8,7 @@ import Dashboard from "./page/Dashboard";
 import Users from "./page/Users";
 import Settings from "./page/Settings";
 import { AuthProvider, AuthContext } from "./context/AuthContext"; // Importar AuthContext
+import RegisterUser from "./page/users/RegisterUser";
 
 const App = () => {
   return (
@@ -111,6 +112,14 @@ const AppContent = () => {
             element={
               <Layout darkMode={darkMode} toggleDarkMode={toggleDarkMode} onLogout={handleLogout}>
                 <Settings />
+              </Layout>
+            }
+          />
+          <Route
+            path="/users/register"
+            element={
+              <Layout darkMode={darkMode} toggleDarkMode={toggleDarkMode} onLogout={handleLogout}>
+                <RegisterUser />
               </Layout>
             }
           />
