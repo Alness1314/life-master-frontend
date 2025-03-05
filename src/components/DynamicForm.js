@@ -1,84 +1,126 @@
-import React from 'react';
-import { Input, Select, Option, Button } from '@material-tailwind/react';
+import React, { useEffect } from 'react';
+import { useForm, Controller } from 'react-hook-form';
+import { TextField, MenuItem, Button, Grid2  } from '@mui/material';
 
-const DynamicForm = ({ fields, onSubmit }) => {
-  const handleSubmit = (e) => {
-    e.preventDefault();
-    const formData = new FormData(e.target);
-    const data = {};
-    fields.forEach((field) => {
-      data[field.name] = formData.get(field.name);
-    });
-    onSubmit(data); // Pasamos los datos al componente padre
-  };
+const DynamicForm = ({ fields, onSubmit, initialValues, darkMode=false }) => {
+    const { control, handleSubmit, reset } = useForm();
 
-  // Mapeo de valores de span a clases de Tailwind CSS
-  const getColumnClass = (span) => {
-    switch (span) {
-      case 1:
-        return 'col-span-1';
-      case 2:
-        return 'col-span-2';
-      case 3:
-        return 'col-span-3';
-      case 4:
-        return 'col-span-4';
-      case 5:
-        return 'col-span-5';
-      case 6:
-        return 'col-span-6';
-      case 7:
-        return 'col-span-7';
-      case 8:
-        return 'col-span-8';
-      case 9:
-        return 'col-span-9';
-      case 10:
-        return 'col-span-10';
-      case 11:
-        return 'col-span-11';
-      case 12:
-        return 'col-span-12';
-      default:
-        return 'col-span-12';
-    }
-  };
+    // Precargar los valores iniciales cuando el componente se monta
+    useEffect(() => {
+        if (initialValues) {
+            reset(initialValues); // Establecer valores iniciales con react-hook-form
+        }
+    }, [initialValues, reset]);
 
-  return (
-    <form onSubmit={handleSubmit} className="grid grid-cols-12 gap-4 p-6 bg-white rounded-lg shadow-md">
-      {fields.map((field, index) => (
-        <div key={index} className={getColumnClass(field.span || 12)}>
-          {field.type === 'dropdown' ? (
-            <Select
-              name={field.name}
-              label={field.label}
-              required={field.required}
-              color="blue"
-            >
-              {field.options.map((option, i) => (
-                <Option key={i} value={option.value}>
-                  {option.label}
-                </Option>
-              ))}
-            </Select>
-          ) : (
-            <Input
-              type={field.type}
-              name={field.name}
-              label={field.label}
-              required={field.required}
-              color="blue"
-            />
-          )}
-        </div>
-      ))}
-      <div className="col-span-12 flex justify-end">
-        <Button type="submit" color="blue">
-          Registrar
-        </Button>
-      </div>
-    </form>
-  );
+    // Mapeo de valores de span a columnas de Grid2
+    const getColumnClass = (span) => {
+        return span;
+    };
+
+    return (
+        <form onSubmit={handleSubmit(onSubmit)}>
+            <Grid2 container spacing={3} style={{ padding: '24px' }}>
+                {fields.map((field, index) => (
+                    <Grid2 item 
+                    size = { getColumnClass(field.span) } 
+                    key={index}>
+                        {field.type === 'dropdown' ? (
+                            <Controller
+                                name={field.name}
+                                control={control}
+                                defaultValue=""
+                                render={({ field: { onChange, value } }) => (
+                                    <TextField
+                                        select
+                                        label={field.label}
+                                        required={field.required}
+                                        variant="outlined"
+                                        fullWidth
+                                        size="small"
+                                        value={value}
+                                        onChange={(e) => onChange(e.target.value)}
+                                        sx={{
+                                            "& .MuiOutlinedInput-root": {
+                                                "& fieldset": {
+                                                    borderColor: darkMode ? "white" : "gray",
+                                                },
+                                                "&:hover fieldset": {
+                                                    borderColor: darkMode ? "primary.main" : "gray",
+                                                },
+                                                "&.Mui-focused fieldset": {
+                                                    borderColor: darkMode ? "primary.main" : "gray",
+                                                },
+                                            },
+                                            "& .MuiInputLabel-root": {
+                                                color: darkMode ? "white" : "gray",
+                                            },
+                                            "& .MuiSelect-icon": {
+                                                color: darkMode ? "white" : "gray",
+                                            },
+                                            "& .MuiInputBase-input": {
+                                                color: darkMode ? "white" : "black", // Texto en blanco en modo oscuro, negro en modo claro
+                                            },
+                                        }}
+                                    >
+                                        {field.options.map((option, i) => (
+                                            <MenuItem key={i} value={option.value}>
+                                                {option.label}
+                                            </MenuItem>
+                                        ))}
+                                    </TextField>
+                                )}
+                            />
+                        ) : (
+                            <Controller
+                                name={field.name}
+                                control={control}
+                                defaultValue=""
+                                render={({ field: { onChange, value } }) => (
+                                    <TextField
+                                        type={field.type}
+                                        label={field.label}
+                                        required={field.required}
+                                        variant="outlined"
+                                        fullWidth
+                                        size="small"
+                                        value={value}
+                                        sx={{
+                                            "& .MuiOutlinedInput-root": {
+                                                "& fieldset": {
+                                                    borderColor: darkMode ? "white" : "gray",
+                                                },
+                                                "&:hover fieldset": {
+                                                    borderColor: darkMode ? "primary.main" : "gray",
+                                                },
+                                                "&.Mui-focused fieldset": {
+                                                    borderColor: darkMode ? "primary.main" : "gray",
+                                                },
+                                            },
+                                            "& .MuiInputLabel-root": {
+                                                color: darkMode ? "white" : "gray",
+                                            },
+                                            "& .MuiSelect-icon": {
+                                                color: darkMode ? "white" : "gray",
+                                            },
+                                            "& .MuiInputBase-input": {
+                                                color: darkMode ? "white" : "black", // Texto en blanco en modo oscuro, negro en modo claro
+                                            },
+                                        }}
+                                        onChange={(e) => onChange(e.target.value)}
+                                    />
+                                )}
+                            />
+                        )}
+                    </Grid2>
+                ))}
+                <Grid2 item size = {12} style={{ display: 'flex', justifyContent: 'flex-end' }}>
+                    <Button type="submit" variant="contained" color="primary">
+                        Enviar
+                    </Button>
+                </Grid2>
+            </Grid2>
+        </form>
+    );
 };
 
 export default DynamicForm;

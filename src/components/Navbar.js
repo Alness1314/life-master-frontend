@@ -120,7 +120,7 @@ export function NavbarComponent({
                   alt={user?.name || "Usuario"}
                   withBorder={true}
                   className="p-0.5"
-                  src={user?.avatar || "https://docs.material-tailwind.com/img/face-2.jpg"}
+                  src={user?.avatar || "/img/usuario.png"}
                 />
               </Button>
             </MenuHandler>
@@ -169,7 +169,7 @@ export function NavbarComponent({
         <DialogBody>
           <div className="flex items-center gap-4">
             <Avatar
-              src={user?.avatar || "https://docs.material-tailwind.com/img/face-2.jpg"}
+              src={user?.avatar || "/img/usuario.png"}
               alt={user?.name || "Usuario"}
               className="h-16 w-16 rounded-full"
             />

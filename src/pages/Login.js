@@ -14,7 +14,7 @@ function Login({ darkMode, toggleDarkMode, onLogin }) {
     e.preventDefault();
 
     try {
-      const response = await fetch(`${process.env.REACT_APP_API_URL}/auth`, {
+      const response = await fetch(`${process.env.REACT_APP_API_URL}${process.env.REACT_APP_API_PREFIX}/auth`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -53,7 +53,7 @@ function Login({ darkMode, toggleDarkMode, onLogin }) {
           checked={darkMode}
           onChange={toggleDarkMode}
           label={darkMode ? "Modo Oscuro" : "Modo Claro"}
-          color="deep-purple"
+          color="indigo"
         />
       </div>
 
@@ -64,7 +64,7 @@ function Login({ darkMode, toggleDarkMode, onLogin }) {
             darkMode ? "bg-gray-900/90 border-gray-800" : "bg-gray-50/90 border-gray-200"
           }`}
         >
-          <CardHeader shadow={false} floated={false} className="text-left bg-transparent">
+          <CardHeader shadow={false} floated={false} className="text-center bg-transparent">
             <div className="flex justify-center mb-2">
               <img src="/img/logo.png" alt="Icono" className="w-24 h-24 mb-4" />
             </div>

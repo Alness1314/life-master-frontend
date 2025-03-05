@@ -16,7 +16,7 @@ export function AuthProvider({ children }) {
     const decodedToken = jwtDecode(token);
     const userId = decodedToken.id;
 
-    fetch(`http://localhost:8080/api/v1/users/${userId}`, {
+    fetch(`${process.env.REACT_APP_API_URL}${process.env.REACT_APP_API_PREFIX}/users/${userId}`, {
       headers: { Authorization: `Bearer ${token}` },
     })
       .then((res) => res.json())
@@ -25,20 +25,18 @@ export function AuthProvider({ children }) {
           name: data.fullName,
           email: data.username,
           profile: data.profiles[0].name,
-          avatar: data.imageId || "https://docs.material-tailwind.com/img/face-2.jpg",
+          avatar: data.imageId || "/img/usuario.png",
+          idProfile: data.profiles[0].id
         });
 
-        return fetch(`http://localhost:8080/api/v1/profiles/${data.profiles[0].id}/modules`, {
+        return fetch(`${process.env.REACT_APP_API_URL}${process.env.REACT_APP_API_PREFIX}/modules/all?profile=${data.profiles[0].id}&level=sidebar`, {
           headers: { Authorization: `Bearer ${token}` },
         });
       })
       .then((res) => res.json())
       .then((modules) => {
-        const rootModules = modules.find((mod) => mod.name === "root")?.children || [];
-        const dashboardChildren = modules.find((mod) => mod.name === "Dashboard")?.children || [];
-
         // Ordenar los módulos por el campo "name" (alfabéticamente)
-        const sortedRootModules = rootModules
+        const sortedRootModules = modules
           .map(({ name, route, iconName }) => ({
             type: "item",
             label: name,
@@ -48,7 +46,7 @@ export function AuthProvider({ children }) {
           .sort((a, b) => a.label.localeCompare(b.label)); // Ordenar alfabéticamente por "label"
 
         setMenuItems(sortedRootModules); // Usar los módulos ordenados
-        setDashboardModules(dashboardChildren);
+        //setDashboardModules(dashboardChildren);
         setIsModulesLoaded(true); // Marcar los módulos como cargados
       })
       .catch((error) => console.error("Error fetching user/modules", error));

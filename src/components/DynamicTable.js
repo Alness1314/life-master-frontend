@@ -2,7 +2,7 @@ import React, { useMemo } from "react";
 import { useReactTable, getCoreRowModel, getSortedRowModel, getPaginationRowModel, flexRender } from "@tanstack/react-table";
 import { Button, Card, Typography, Spinner, Alert } from "@material-tailwind/react";
 
-const DynamicTable = ({ columns, data, loading, error, onDetails, onUpdate, onDelete }) => {
+const DynamicTable = ({ columns, data, loading, error, onDetails, onUpdate, onDelete, pageSize = 10 }) => {
   // Configuración de la tabla con useReactTable
   const table = useReactTable({
     data,
@@ -12,13 +12,14 @@ const DynamicTable = ({ columns, data, loading, error, onDetails, onUpdate, onDe
     getPaginationRowModel: getPaginationRowModel(),
     initialState: {
       pagination: {
-        pageSize: 10, // Tamaño de página por defecto
+        pageSize:  pageSize, // Tamaño de página por defecto
       },
     },
   });
 
   return (
-    <div className="p-4 bg-white dark:bg-gray-900">
+    <div className="p-4 "
+    color="transparent">
       {/* Mostrar mensaje de error si existe */}
       {error && (
         <Alert color="red" className="mb-4 dark:bg-red-900 dark:text-white">
@@ -29,7 +30,7 @@ const DynamicTable = ({ columns, data, loading, error, onDetails, onUpdate, onDe
       {/* Mostrar spinner mientras se cargan los datos */}
       {loading ? (
         <div className="flex justify-center items-center">
-          <Spinner color="blue" className="h-8 w-8 dark:text-blue-300" />
+          <Spinner color="indigo" className="h-10 w-10" />
         </div>
       ) : (
         /* Tabla de datos con ordenamiento y paginación */
@@ -105,7 +106,7 @@ const DynamicTable = ({ columns, data, loading, error, onDetails, onUpdate, onDe
                 key={i}
                 variant={i === table.getState().pagination.pageIndex ? "filled" : "text"}
                 onClick={() => table.setPageIndex(i)}
-                className="dark:text-white"
+                className="bg-indigo-400 dark:bg-indigo-200 text-white dark:text-gray-900"
               >
                 {i + 1}
               </Button>

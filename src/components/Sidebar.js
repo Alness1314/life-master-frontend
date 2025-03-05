@@ -20,12 +20,11 @@ export function Sidebar({
   const navigate = useNavigate();
 
   // Estilos condicionales
-  const sidebarBgColor = darkMode ? "bg-gray-800" : "bg-white";
   const textColor = darkMode ? "text-white" : "text-black";
   const iconColor = darkMode ? "text-white" : "text-black";
   const hoverStyles = darkMode
     ? "hover:bg-opacity-20 hover:text-white"
-    : "hover:bg-gray-300 hover:text-black";
+    : "hover:bg-gray-300 hover:text-black"; 
 
   return (
     <div className={`h-screen flex items-center justify-center bg-white dark:bg-gray-900 shadow-xl shadow-blue-gray-500/10 dark:shadow-blue-gray-500/5 border border-black/15`}>
@@ -36,11 +35,8 @@ export function Sidebar({
           <img
             src={brandLogo}
             alt="brand"
-            className="h-9 w-9"
+            className="h-12 w-19"
           />
-          <Typography className={`text-lg font-bold ${textColor}`}>
-            {brandName}
-          </Typography>
         </div>
         <hr className={`my-2 ${darkMode ? "border-gray-800" : "border-gray-200"}`} />
         <List className="flex-1">
@@ -55,7 +51,7 @@ export function Sidebar({
             >
               <ListItemPrefix>
                 <img
-                  src={`/icons/${item.icon}`}
+                  src={darkMode ? `/icons/${item.icon}.svg` : `/icons/${item.icon}_dark.svg`}
                   alt={item.label}
                   color={iconColor}
                   className={`h-5 w-5 `}
@@ -77,7 +73,7 @@ export function Sidebar({
                   className={`h-5 w-5 ${iconColor}`}
                 />
               </ListItemPrefix>
-              Sign Out
+              Cerrar Sesión
             </ListItem>
           </List>
           <Typography

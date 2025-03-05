@@ -2,7 +2,7 @@ import React from "react";
 import { Button } from "@material-tailwind/react";
 
 const MaterialButton = ({ children, mode = false, size = "lg", fullWidth = false, className = "", ...props }) => {
-  const color = mode ? "deep-purple" : "deep-purple";
+  const color = mode ? "indigo" : "indigo";
 
   return (
     <Button
