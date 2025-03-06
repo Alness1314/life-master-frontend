@@ -1,31 +1,35 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useContext } from "react";
 import DynamicTable from "../../components/DynamicTable"; // Importa el componente de la tabla
 import { Button, IconButton, Typography } from "@material-tailwind/react";
 import { useNavigate } from "react-router-dom";
 import SweetAlert2 from '../../components/SweetAlert2';
 import { EyeIcon, PencilSquareIcon, TrashIcon, PlusIcon } from "@heroicons/react/24/solid"; // Íconos de Heroicons
 import Breadcrumbs from "../../components/Breadcrumbs"; // Importa el componente Breadcrumbs
+import { AuthContext } from "../../context/AuthContext";
+import { jwtDecode } from "jwt-decode";
 
-export default function Modules({ darkMode }) {
+export default function Asistencia({ darkMode }) {
     const [token] = useState(localStorage.getItem("token")); // Estado para rastrear el token
     const [data, setData] = useState([]); // Estado para los datos
     const [loading, setLoading] = useState(true); // Estado para el indicador de carga
     const [error, setError] = useState(null); // Estado para manejar errores
     const navigate = useNavigate();
+    const { user } = useContext(AuthContext);
    
     const textColor = darkMode ? "text-white" : "text-gray-900";
     const subTextColor = darkMode ? "text-blue-gray-200" : "text-blue-grey";
+
+    const decodedToken = jwtDecode(token);
+        const userId = decodedToken.id;
 
     // Función para obtener los datos del endpoint
     const fetchData = async () => {
         if (!token) return;
         try {
             setLoading(true); // Activar el indicador de carga
-            const response = await fetch(`${process.env.REACT_APP_API_URL}${process.env.REACT_APP_API_PREFIX}/modules/all`, {
+            const response = await fetch(`${process.env.REACT_APP_API_URL}${process.env.REACT_APP_API_PREFIX}/usuarios/${userId}/assistance`, {
                 headers: { Authorization: `Bearer ${token}` },
             }); // Reemplaza con tu endpoint
-
-        
             if (!response.ok) {
                 throw new Error("Error al obtener los datos");
             }
@@ -50,24 +54,42 @@ export default function Modules({ darkMode }) {
             accessorKey: "id", // La clave debe coincidir con el campo en los datos
         },
         {
-            header: "Nombre",
-            accessorKey: "name",
+            header: "Fecha de trabajo",
+            accessorKey: "workDate",
         },
         {
-            header: "Direccion",
-            accessorKey: "route",
+            header: "Hora de entrada",
+            accessorKey: "timeEntry",
         },
         {
-            header: "Descripcion",
-            accessorKey: "description",
+            header: "Hora de salida",
+            accessorKey: "departureTime",
         },
         {
-            header: "Icono",
-            accessorKey: "iconName",
+            header: "A tiempo",
+            accessorKey: "onTime",
         },
         {
-            header: "Categoria",
-            accessorKey: "level",
+            header: "Retardo",
+            accessorKey: "retard",
+        },
+        {
+            header: "Ausencia justificada",
+            accessorKey: "justifiedAbsence",
+        },
+        {
+            header: "Ausencia injustificada",
+            accessorKey: "unjustifiedAbsence",
+        },
+        {
+            header: "Habilitado",
+            accessorKey: "enabled",
+            cell: ({ getValue }) => (getValue() ? "Activo" : "Inactivo"), // Formatear el estado
+        },
+        {
+            header: "Fecha de creacion",
+            accessorKey: "createAt",
+            cell: ({ getValue }) => (getValue() ? "Activo" : "Inactivo"), // Formatear el estado
         },
         {
             header: "Acciones",
@@ -98,7 +120,7 @@ export default function Modules({ darkMode }) {
 
     // Funciones para manejar acciones
     const handleDetails = (id) => {
-        navigate(`/modules/details/${id}`);
+        navigate(`/measurement-system/details/${id}`);
     };
 
     const handleUpdate = (id) => {
@@ -159,7 +181,7 @@ export default function Modules({ darkMode }) {
     const breadcrumbsPaths = [
         {
             name: "Home",
-            route: "/settings",
+            route: "/Dashboard",
             icon: (
                 <svg
                     xmlns="http://www.w3.org/2000/svg"
@@ -172,20 +194,20 @@ export default function Modules({ darkMode }) {
             ),
         },
         {
-            name: "Modulos",
-            route: "/app-modules",
+            name: "Servicios",
+            route: "/cron-services",
         },
     ];
 
     return (
-        <div className="p-0 m-0 h-[calc(100vh-100px)] overflow-hidden overflow-y-auto overflow-x-auto">
+        <div className="p-0 m-0">
             {/* Breadcrumbs */}
             <Breadcrumbs darkMode={darkMode} paths={breadcrumbsPaths} />
             <Typography variant="h4" className={`mb-1 ${textColor}`}>
-                Modulos
+                Servicios
             </Typography>
             <Typography variant="paragraph" className={`mb-2 ${subTextColor}`}>
-                Administra los modulos de la aplicacion
+                Administra los servicios en ejecucion
             </Typography>
             <hr className="my-2 border-gray-800" />
 
@@ -207,7 +229,6 @@ export default function Modules({ darkMode }) {
                 data={data}
                 loading={loading}
                 error={error}
-                pageSize={5}
             />
         </div>
     );

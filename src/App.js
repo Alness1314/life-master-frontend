@@ -17,10 +17,12 @@ import OpcConnection from "./pages/connection/opc/OpcConnection";
 import JobServices from "./pages/jobs/JobServices"
 import MeasurementDetails from "./pages/measurement/MeasurementDetails";
 import UserDetails from "./pages/users/UserDetails";
+import ModuleDetails from "./pages/modules/ModulesDetails";
 import LinkConfig from "./pages/linkcv/LinkConfig";
 import UnregisteredOperations from "./pages/UnregisteredOperations";
 import Modules from "./pages/modules/Modules"
 import VariableSettings from "./pages/settings/VariableSettings"
+import Asistencia from "./pages/asistencia/Asistencia"
 
 const App = () => {
   return (
@@ -216,10 +218,26 @@ const AppContent = () => {
             }
           />
           <Route
+            path="/asistencia"
+            element={
+              <Layout darkMode={darkMode} toggleDarkMode={toggleDarkMode} onLogout={handleLogout}>
+                <Asistencia darkMode={darkMode} />
+              </Layout>
+            }
+          />
+          <Route
             path="/users/update/:userId"
             element={
               <Layout darkMode={darkMode} toggleDarkMode={toggleDarkMode} onLogout={handleLogout}>
                 <EditUser darkMode={darkMode} />
+              </Layout>
+            }
+          />
+          <Route
+            path="/modules/details/:moduleId"
+            element={
+              <Layout darkMode={darkMode} toggleDarkMode={toggleDarkMode} onLogout={handleLogout}>
+                <ModuleDetails darkMode={darkMode} />
               </Layout>
             }
           />
@@ -232,6 +250,7 @@ const AppContent = () => {
             }
           />
         </Route>
+        
 
         {/* Redirigir a login por defecto */}
         <Route path="*" element={<Navigate to="/login" replace />} />

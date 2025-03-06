@@ -27,7 +27,7 @@ export default function Users({ darkMode }) {
     if (!token) return;
     try {
       setLoading(true); // Activar el indicador de carga
-      const response = await fetch(`${process.env.REACT_APP_API_URL}/users`, {
+      const response = await fetch(`${process.env.REACT_APP_API_URL}${process.env.REACT_APP_API_PREFIX}/users`, {
         headers: { Authorization: `Bearer ${token}` },
       }); // Reemplaza con tu endpoint
       if (!response.ok) {
@@ -74,24 +74,18 @@ export default function Users({ darkMode }) {
       },
     },
     {
-      header: "Nombre Aplicacion",
-      accessorKey: "serviceConfig", // Accede a la lista de perfiles
-      cell: ({ getValue }) => {
-        const serviceConfig = getValue(); // Obtiene la lista de perfiles
-        if (serviceConfig) {
-          return serviceConfig.name; // Retorna el nombre del primer perfil
-        }
-        return "No disponible"; // Mensaje por defecto si no hay perfiles
-      },
+      header: "Verificado",
+      accessorKey: "verified", // Accede a la lista de perfiles
+      cell: ({ getValue }) => (getValue() ? "Si" :  "No"),
     },
     {
       header: "Estado",
-      accessorKey: "enabled",
-      cell: ({ getValue }) => (getValue() ? "Activo" : "Inactivo"), // Formatear el estado
+      accessorKey: "erased",
+      cell: ({ getValue }) => (getValue() ? "Inactivo" :  "Activo"), // Formatear el estado
     },
     {
       header: "Fecha de Creación",
-      accessorKey: "dateCreate",
+      accessorKey: "created",
       cell: ({ getValue }) => new Date(getValue()).toLocaleDateString(), // Formatear la fecha
     },
     {
@@ -145,7 +139,7 @@ export default function Users({ darkMode }) {
 
     if (result.isConfirmed) {
       try {
-        const response = await fetch(`${process.env.REACT_APP_API_URL}/users/${id}`, {
+        const response = await fetch(`${process.env.REACT_APP_API_URL}${process.env.REACT_APP_API_PREFIX}/users/${id}`, {
           method: "DELETE",
           headers: {
             Authorization: `Bearer ${token}`,

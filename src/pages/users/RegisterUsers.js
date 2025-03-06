@@ -80,7 +80,8 @@ const RegisterUser = ({ darkMode }) => {
 
     const handleSubmit = async (formData) => {
         try {
-            const response = await fetch(`${process.env.REACT_APP_API_URL}/users`, {
+            // Asegurarse de que 'profile' sea un array
+            const response = await fetch(`${process.env.REACT_APP_API_URL}${process.env.REACT_APP_API_PREFIX}/users`, {
                 method: 'POST',
                 headers: {
                     Authorization: `Bearer ${token}`,
@@ -139,32 +140,12 @@ const RegisterUser = ({ darkMode }) => {
         },
         {
             type: 'dropdown',
-            name: 'profile',
+            name: 'profiles',
             label: 'Perfil',
             required: true,
             span: 12,
             options: profileOptions,
-        },
-        {
-            type: 'text',
-            name: 'serviceConfig.name',
-            label: 'Nombre del servicio',
-            required: true,
-            span: 12,
-        },
-        {
-            type: 'text',
-            name: 'serviceConfig.usernameCv',
-            label: 'Usuario del servicio',
-            required: true,
-            span: 6,
-        },
-        {
-            type: 'password',
-            name: 'serviceConfig.passwordCv',
-            label: 'Contraseña del servicio',
-            required: true,
-            span: 6,
+            multiple: true, // Indicar que es un dropdown múltiple
         }
     ];
 
@@ -193,7 +174,7 @@ const RegisterUser = ({ darkMode }) => {
             {/* Formulario Dinámico */}
             <div className={`${bgColor} max-h-screen grid grid-cols-12 items-center justify-center`}>
                 <div className={`mt-2 col-span-12 col-start-1 ${cardBgColor} rounded-lg shadow-lg`}>
-                    <DynamicForm fields={formFields} onSubmit={handleSubmit} darkMode={darkMode}/>
+                    <DynamicForm fields={formFields} onSubmit={handleSubmit} darkMode={darkMode} />
                 </div>
 
             </div>

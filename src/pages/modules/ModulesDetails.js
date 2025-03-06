@@ -9,10 +9,10 @@ import {
 } from "@material-tailwind/react";
 import Breadcrumbs from "../../components/Breadcrumbs"; // Importa el componente Breadcrumbs
 
-export default function UserDetails({ darkMode }) {
-    const { userId } = useParams(); // Obtener el ID del usuario desde la URL
+export default function ModuleDetails({ darkMode }) {
+    const { moduleId } = useParams(); // Obtener el ID del usuario desde la URL
     const [token] = useState(localStorage.getItem("token")); // Estado para rastrear el token
-    const [userData, setUserData] = useState(null);
+    const [moduleData, setModuleData] = useState(null);
     const bgColor = darkMode ? "bg-gray-900" : "bg-white";
     const textColor = darkMode ? "text-white" : "text-gray-900";
     const subTextColor = darkMode ? "text-blue-gray-200" : "text-blue-grey";
@@ -22,20 +22,20 @@ export default function UserDetails({ darkMode }) {
         // Simulando la obtención de datos desde una API
         const fetchData = async () => {
             try {
-                const response = await fetch(`${process.env.REACT_APP_API_URL}${process.env.REACT_APP_API_PREFIX}/users/${userId}`, {
+                const response = await fetch(`${process.env.REACT_APP_API_URL}${process.env.REACT_APP_API_PREFIX}/modules/${moduleId}`, {
                     headers: { Authorization: `Bearer ${token}` },
                 });
                 const data = await response.json();
-                setUserData(data);
+                setModuleData(data);
             } catch (error) {
                 console.error("Error fetching measurement data:", error);
             }
         };
 
         fetchData();
-    }, [userId]);
+    }, [moduleId]);
 
-    if (!userData) {
+    if (!moduleData) {
         return (
             <div className="flex items-center justify-center h-screen">
                 <Spinner color="indigo" className="h-10 w-10" />
@@ -44,12 +44,13 @@ export default function UserDetails({ darkMode }) {
 
     // Definir los campos que queremos mostrar dinámicamente
     const fieldsToDisplay = [
-        { label: "Nombre", key: "fullName" },
-        { label: "Usuario", key: "username" },
-        { label: "Perfil", key: "profiles", format: (value) => value.map(profile => profile.name).join(", ") },
-        { label: "Verificado", key: "verified", format: (value) => (value ? "Si" : "No") },
-        { label: "Estado", key: "erased", format: (value) => (value ? "Inactive" : "Active") },
-        { label: "Fecha y hora de creación", key: "created" },
+        { label: "Nombre", key: "name" },
+        { label: "Path", key: "route" },
+        { label: "Icon", key: "iconName" },
+        { label: "Nivel", key: "level" },
+        { label: "Descripcion", key: "description" },
+        { label: "Es Padre", key: "isParent", format: (value) => (value ? "Si" : "No") },
+        { label: "Perfil", key: "profile", format: (value) => value.map(profile => profile.name).join(", ") },
     ];
 
     // Función para renderizar los campos dinámicamente
@@ -74,7 +75,7 @@ export default function UserDetails({ darkMode }) {
     const breadcrumbsPaths = [
         {
             name: "Home",
-            route: "/Dashboard",
+            route: "/settings",
             icon: (
                 <svg
                     xmlns="http://www.w3.org/2000/svg"
@@ -87,12 +88,12 @@ export default function UserDetails({ darkMode }) {
             ),
         },
         {
-            name: "Usuarios",
-            route: "/users",
+            name: "Modulos",
+            route: "/app-modules",
         },
         {
-            name: "Detalle Usuario",
-            route: `/users/details/${userId}`,
+            name: "Detalle Modulo",
+            route: `/modules/details/${moduleId}`,
         },
     ];
 
@@ -101,10 +102,10 @@ export default function UserDetails({ darkMode }) {
             {/* Breadcrumbs */}
             <Breadcrumbs darkMode={darkMode} paths={breadcrumbsPaths} />
             <Typography variant="h4" className={`mb-1 ${textColor}`}>
-                Usuario
+                Modulos
             </Typography>
             <Typography variant="paragraph" className={`mb-2 ${subTextColor}`}>
-                Detalle del usuario del sistema
+                Detalle del modulo del sistema
             </Typography>
             <hr className="my-2 border-gray-800" />
             <div className={`${bgColor} max-h-screen grid grid-cols-12 items-center justify-center m-1`}>
@@ -125,15 +126,15 @@ export default function UserDetails({ darkMode }) {
                             <div className="flex w-full flex-col gap-0.5">
                                 <div className="flex items-center justify-between">
                                     <Typography variant="h5" className="text-blue-gray dark:text-gray-300">
-                                        Usuario
+                                        Modulos
                                     </Typography>
                                 </div>
-                                <Typography className="text-blue-gray dark:text-gray-300">{userId}</Typography>
+                                <Typography className="text-blue-gray dark:text-gray-300">{moduleId}</Typography>
                             </div>
                         </CardHeader>
                         <CardBody className="ml-12 mb-10 mr-10 mt-4 p-0">
                             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8">
-                                {renderFields(fieldsToDisplay, userData)}
+                                {renderFields(fieldsToDisplay, moduleData)}
                             </div>
                         </CardBody>
                     </Card>

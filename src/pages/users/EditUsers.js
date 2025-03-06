@@ -15,7 +15,7 @@ const EditUser = ({ darkMode, open, handleOpen, userId }) => {
         if (open && userId) {
             const fetchUserData = async () => {
                 try {
-                    const response = await fetch(`${process.env.REACT_APP_API_URL}/users/${userId}`, {
+                    const response = await fetch(`${process.env.REACT_APP_API_URL}${process.env.REACT_APP_API_PREFIX}/users/${userId}`, {
                         headers: {
                             Authorization: `Bearer ${token}`,
                         },
@@ -43,7 +43,7 @@ const EditUser = ({ darkMode, open, handleOpen, userId }) => {
                 delete formData.password;
             }
 
-            const response = await fetch(`${process.env.REACT_APP_API_URL}/users/${userId}`, {
+            const response = await fetch(`${process.env.REACT_APP_API_URL}${process.env.REACT_APP_API_PREFIX}/users/${userId}`, {
                 method: 'PUT',
                 headers: {
                     Authorization: `Bearer ${token}`,
