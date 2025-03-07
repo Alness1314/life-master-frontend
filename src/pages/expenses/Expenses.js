@@ -170,7 +170,7 @@ export default function Expenses({ darkMode }) {
     const breadcrumbsPaths = [
         {
             name: "Home",
-            route: "/settings",
+            route: "/dashboard",
             icon: (
                 <svg
                     xmlns="http://www.w3.org/2000/svg"
@@ -183,8 +183,8 @@ export default function Expenses({ darkMode }) {
             ),
         },
         {
-            name: "Variables",
-            route: "/global-variables",
+            name: "Gastos",
+            route: "/expenses",
         },
     ];
 
@@ -193,10 +193,10 @@ export default function Expenses({ darkMode }) {
             {/* Breadcrumbs */}
             <Breadcrumbs darkMode={darkMode} paths={breadcrumbsPaths} />
             <Typography variant="h4" className={`mb-1 ${textColor}`}>
-                Variables
+            Gastos
             </Typography>
             <Typography variant="paragraph" className={`mb-2 ${subTextColor}`}>
-                Administra las variables de configuracion del sistema
+                Administra tus gastos de manera efectiva
             </Typography>
             <hr className="my-2 border-gray-800" />
 
