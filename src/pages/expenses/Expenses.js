@@ -5,13 +5,17 @@ import { useNavigate } from "react-router-dom";
 import SweetAlert2 from '../../components/SweetAlert2';
 import { EyeIcon, PencilSquareIcon, TrashIcon, PlusIcon } from "@heroicons/react/24/solid"; // Íconos de Heroicons
 import Breadcrumbs from "../../components/Breadcrumbs"; // Importa el componente Breadcrumbs
+import { jwtDecode } from "jwt-decode";
 
-export default function Modules({ darkMode }) {
+export default function Expenses({ darkMode }) {
     const [token] = useState(localStorage.getItem("token")); // Estado para rastrear el token
     const [data, setData] = useState([]); // Estado para los datos
     const [loading, setLoading] = useState(true); // Estado para el indicador de carga
     const [error, setError] = useState(null); // Estado para manejar errores
     const navigate = useNavigate();
+
+    const decodedToken = jwtDecode(token);
+    const userId = decodedToken.id;
    
     const textColor = darkMode ? "text-white" : "text-gray-900";
     const subTextColor = darkMode ? "text-blue-gray-200" : "text-blue-grey";
@@ -21,7 +25,7 @@ export default function Modules({ darkMode }) {
         if (!token) return;
         try {
             setLoading(true); // Activar el indicador de carga
-            const response = await fetch(`${process.env.REACT_APP_API_URL}${process.env.REACT_APP_API_PREFIX}/modules/all`, {
+            const response = await fetch(`${process.env.REACT_APP_API_URL}${process.env.REACT_APP_API_PREFIX}/usuarios/${userId}/expenses`, {
                 headers: { Authorization: `Bearer ${token}` },
             }); // Reemplaza con tu endpoint
 
@@ -50,25 +54,32 @@ export default function Modules({ darkMode }) {
             accessorKey: "id", // La clave debe coincidir con el campo en los datos
         },
         {
-            header: "Nombre",
-            accessorKey: "name",
-        },
-        {
-            header: "Direccion",
-            accessorKey: "route",
+            header: "Banco o Entidad",
+            accessorKey: "bankOrEntity",
         },
         {
             header: "Descripcion",
             accessorKey: "description",
         },
         {
-            header: "Icono",
-            accessorKey: "iconName",
+            header: "Cantidad",
+            accessorKey: "amount",
         },
         {
+            header: "Fecha de pago",
+            accessorKey: "paymentDate",
+            cell: ({ getValue }) => new Date(getValue()).toLocaleDateString(), // Formatear la fecha
+          },
+          {
             header: "Categoria",
-            accessorKey: "level",
-        },
+            accessorKey: "category", // Accede a la lista de perfiles
+            cell: ({ category }) => category.name ,
+          },
+          {
+            header: "Fecha de Creación",
+            accessorKey: "createAt",
+            cell: ({ getValue }) => new Date(getValue()).toLocaleDateString(), // Formatear la fecha
+          },
         {
             header: "Acciones",
             cell: ({ row }) => (
@@ -98,7 +109,7 @@ export default function Modules({ darkMode }) {
 
     // Funciones para manejar acciones
     const handleDetails = (id) => {
-        navigate(`/modules/details/${id}`);
+        navigate(`/measurement-system/details/${id}`);
     };
 
     const handleUpdate = (id) => {
@@ -152,7 +163,7 @@ export default function Modules({ darkMode }) {
 
     // Función para redirigir al formulario de registro
     const handleAddMeasurementSystem = () => {
-        navigate("/app-modules/register");
+        navigate("/measurement-system/register");
     };
 
     // Generar las rutas para el Breadcrumbs
@@ -172,8 +183,8 @@ export default function Modules({ darkMode }) {
             ),
         },
         {
-            name: "Modulos",
-            route: "/app-modules",
+            name: "Variables",
+            route: "/global-variables",
         },
     ];
 
@@ -182,10 +193,10 @@ export default function Modules({ darkMode }) {
             {/* Breadcrumbs */}
             <Breadcrumbs darkMode={darkMode} paths={breadcrumbsPaths} />
             <Typography variant="h4" className={`mb-1 ${textColor}`}>
-                Modulos
+                Variables
             </Typography>
             <Typography variant="paragraph" className={`mb-2 ${subTextColor}`}>
-                Administra los modulos de la aplicacion
+                Administra las variables de configuracion del sistema
             </Typography>
             <hr className="my-2 border-gray-800" />
 

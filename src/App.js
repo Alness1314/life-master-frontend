@@ -23,6 +23,10 @@ import UnregisteredOperations from "./pages/UnregisteredOperations";
 import Modules from "./pages/modules/Modules"
 import VariableSettings from "./pages/settings/VariableSettings"
 import Asistencia from "./pages/asistencia/Asistencia"
+import AsistenciaDetails from "./pages/asistencia/AsistenciaDetails"
+import AsistenciaRegister from "./pages/asistencia/AsistenciaRegister"
+import RegisterModule from "./pages/modules/RegisterModule"
+import Expenses from "./pages/expenses/Expenses"
 
 const App = () => {
   return (
@@ -125,18 +129,11 @@ const AppContent = () => {
             path="/settings"
             element={
               <Layout darkMode={darkMode} toggleDarkMode={toggleDarkMode} onLogout={handleLogout}>
-                <Settings darkMode={darkMode}/>
+                <Settings darkMode={darkMode} />
               </Layout>
             }
           />
-          <Route
-            path="/measurement-system"
-            element={
-              <Layout darkMode={darkMode} toggleDarkMode={toggleDarkMode} onLogout={handleLogout}>
-                <MeasurementSystem darkMode={darkMode} />
-              </Layout>
-            }
-          />
+
           <Route
             path="/measurement-system/details/:id"
             element={
@@ -146,58 +143,27 @@ const AppContent = () => {
             }
           />
           <Route
-            path="/cron-services"
-            element={
-              <Layout darkMode={darkMode} toggleDarkMode={toggleDarkMode} onLogout={handleLogout}>
-                <JobServices darkMode={darkMode} />
-              </Layout>
-            }
-          />
-          <Route
-            path="/unregistered-operations"
-            element={
-              <Layout darkMode={darkMode} toggleDarkMode={toggleDarkMode} onLogout={handleLogout}>
-                <UnregisteredOperations darkMode={darkMode} />
-              </Layout>
-            }
-          />
-          <Route
-            path="/modbus"
-            element={
-              <Layout darkMode={darkMode} toggleDarkMode={toggleDarkMode} onLogout={handleLogout}>
-                <ModbusConnection darkMode={darkMode} />
-              </Layout>
-            }
-          />
-          <Route
-            path="/link-config"
-            element={
-              <Layout darkMode={darkMode} toggleDarkMode={toggleDarkMode} onLogout={handleLogout}>
-                <LinkConfig darkMode={darkMode} />
-              </Layout>
-            }
-          />
-          <Route
-            path="/opc-server"
-            element={
-              <Layout darkMode={darkMode} toggleDarkMode={toggleDarkMode} onLogout={handleLogout}>
-                <OpcConnection darkMode={darkMode} />
-              </Layout>
-            }
-          />
-          <Route
-            path="/connections"
-            element={
-              <Layout darkMode={darkMode} toggleDarkMode={toggleDarkMode} onLogout={handleLogout}>
-                <Connections darkMode={darkMode} />
-              </Layout>
-            }
-          />
-          <Route
             path="/app-modules"
             element={
               <Layout darkMode={darkMode} toggleDarkMode={toggleDarkMode} onLogout={handleLogout}>
                 <Modules darkMode={darkMode} />
+              </Layout>
+            }
+          />
+          
+          <Route
+            path="/app-modules/register"
+            element={
+              <Layout darkMode={darkMode} toggleDarkMode={toggleDarkMode} onLogout={handleLogout}>
+                <RegisterModule darkMode={darkMode} />
+              </Layout>
+            }
+          />
+          <Route
+            path="/modules/details/:moduleId"
+            element={
+              <Layout darkMode={darkMode} toggleDarkMode={toggleDarkMode} onLogout={handleLogout}>
+                <ModuleDetails darkMode={darkMode} />
               </Layout>
             }
           />
@@ -218,10 +184,10 @@ const AppContent = () => {
             }
           />
           <Route
-            path="/asistencia"
+            path="/users/details/:userId"
             element={
               <Layout darkMode={darkMode} toggleDarkMode={toggleDarkMode} onLogout={handleLogout}>
-                <Asistencia darkMode={darkMode} />
+                <UserDetails darkMode={darkMode} />
               </Layout>
             }
           />
@@ -234,23 +200,42 @@ const AppContent = () => {
             }
           />
           <Route
-            path="/modules/details/:moduleId"
+            path="/asistencia"
             element={
               <Layout darkMode={darkMode} toggleDarkMode={toggleDarkMode} onLogout={handleLogout}>
-                <ModuleDetails darkMode={darkMode} />
+                <Asistencia darkMode={darkMode} />
               </Layout>
             }
           />
           <Route
-            path="/users/details/:userId"
+            path="/asistencia/details/:asistanceId"
             element={
               <Layout darkMode={darkMode} toggleDarkMode={toggleDarkMode} onLogout={handleLogout}>
-                <UserDetails darkMode={darkMode} />
+                <AsistenciaDetails darkMode={darkMode} />
               </Layout>
             }
           />
+          <Route
+            path="/asistencia/register"
+            element={
+              <Layout darkMode={darkMode} toggleDarkMode={toggleDarkMode} onLogout={handleLogout}>
+                <AsistenciaRegister darkMode={darkMode} />
+              </Layout>
+            }
+          />
+          
+          <Route
+            path="/expenses"
+            element={
+              <Layout darkMode={darkMode} toggleDarkMode={toggleDarkMode} onLogout={handleLogout}>
+                <Expenses darkMode={darkMode} />
+              </Layout>
+            }
+          />
+
+
         </Route>
-        
+
 
         {/* Redirigir a login por defecto */}
         <Route path="*" element={<Navigate to="/login" replace />} />

@@ -1,11 +1,10 @@
-import React, { useEffect, useState, useContext } from "react";
+import React, { useEffect, useState } from "react";
 import DynamicTable from "../../components/DynamicTable"; // Importa el componente de la tabla
 import { Button, IconButton, Typography } from "@material-tailwind/react";
 import { useNavigate } from "react-router-dom";
 import SweetAlert2 from '../../components/SweetAlert2';
 import { EyeIcon, PencilSquareIcon, TrashIcon, PlusIcon } from "@heroicons/react/24/solid"; // Íconos de Heroicons
 import Breadcrumbs from "../../components/Breadcrumbs"; // Importa el componente Breadcrumbs
-import { AuthContext } from "../../context/AuthContext";
 import { jwtDecode } from "jwt-decode";
 
 export default function Asistencia({ darkMode }) {
@@ -14,13 +13,12 @@ export default function Asistencia({ darkMode }) {
     const [loading, setLoading] = useState(true); // Estado para el indicador de carga
     const [error, setError] = useState(null); // Estado para manejar errores
     const navigate = useNavigate();
-    const { user } = useContext(AuthContext);
-   
+
     const textColor = darkMode ? "text-white" : "text-gray-900";
     const subTextColor = darkMode ? "text-blue-gray-200" : "text-blue-grey";
 
     const decodedToken = jwtDecode(token);
-        const userId = decodedToken.id;
+    const userId = decodedToken.id;
 
     // Función para obtener los datos del endpoint
     const fetchData = async () => {
@@ -60,36 +58,49 @@ export default function Asistencia({ darkMode }) {
         {
             header: "Hora de entrada",
             accessorKey: "timeEntry",
+            cell: ({ getValue }) => (getValue()===null ? "-" : getValue()), // Formatear el estado
         },
         {
             header: "Hora de salida",
             accessorKey: "departureTime",
+            cell: ({ getValue }) => (getValue()===null ? "-" : getValue()), // Formatear el estado
         },
         {
             header: "A tiempo",
             accessorKey: "onTime",
+            cell: ({ getValue }) => {
+                const value = getValue();
+                return value === null ? "-" : value ? "Si" : "No";
+            }
         },
         {
             header: "Retardo",
             accessorKey: "retard",
+            cell: ({ getValue }) => {
+                const value = getValue();
+                return value === null ? "-" : value ? "Si" : "No";
+            }
         },
         {
             header: "Ausencia justificada",
             accessorKey: "justifiedAbsence",
+            cell: ({ getValue }) => {
+                const value = getValue();
+                return value === null ? "-" : value ? "Si" : "No";
+            }
         },
         {
             header: "Ausencia injustificada",
             accessorKey: "unjustifiedAbsence",
-        },
-        {
-            header: "Habilitado",
-            accessorKey: "enabled",
-            cell: ({ getValue }) => (getValue() ? "Activo" : "Inactivo"), // Formatear el estado
+            cell: ({ getValue }) => {
+                const value = getValue();
+                return value === null ? "-" : value ? "Si" : "No";
+            }
         },
         {
             header: "Fecha de creacion",
             accessorKey: "createAt",
-            cell: ({ getValue }) => (getValue() ? "Activo" : "Inactivo"), // Formatear el estado
+            cell: ({ getValue }) => new Date(getValue()).toLocaleDateString(), // Formatear el estado
         },
         {
             header: "Acciones",
@@ -108,7 +119,7 @@ export default function Asistencia({ darkMode }) {
                         <PencilSquareIcon className="h-5 w-5 text-white dark:text-gray-900" />
                     </IconButton>
                     <IconButton
-                        onClick={() => handleDelete(row.original.jobId)}
+                        onClick={() => handleDelete(row.original.id)}
                         className="bg-indigo-400 dark:bg-indigo-200"
                     >
                         <TrashIcon className="h-5 w-5 text-white dark:text-gray-900" />
@@ -120,11 +131,11 @@ export default function Asistencia({ darkMode }) {
 
     // Funciones para manejar acciones
     const handleDetails = (id) => {
-        navigate(`/measurement-system/details/${id}`);
+        navigate(`/asistencia/details/${id}`);
     };
 
     const handleUpdate = (id) => {
-        navigate(`/measurement-system/update/${id}`);
+        navigate(`/asistencia/details/${id}`);
     };
 
     const handleDelete = async (id) => {
@@ -141,7 +152,7 @@ export default function Asistencia({ darkMode }) {
 
         if (result.isConfirmed) {
             try {
-                const response = await fetch(`${process.env.REACT_APP_API_URL}${process.env.REACT_APP_API_PREFIX}/crons/deletejob/${id}`, {
+                const response = await fetch(`${process.env.REACT_APP_API_URL}${process.env.REACT_APP_API_PREFIX}/usuarios/${userId}/assistance/${id}`, {
                     method: "DELETE",
                     headers: {
                         Authorization: `Bearer ${token}`,
@@ -174,7 +185,7 @@ export default function Asistencia({ darkMode }) {
 
     // Función para redirigir al formulario de registro
     const handleAddMeasurementSystem = () => {
-        navigate("/measurement-system/register");
+        navigate("/asistencia/register");
     };
 
     // Generar las rutas para el Breadcrumbs
@@ -194,8 +205,8 @@ export default function Asistencia({ darkMode }) {
             ),
         },
         {
-            name: "Servicios",
-            route: "/cron-services",
+            name: "Asistencia",
+            route: "/asistencia",
         },
     ];
 
@@ -204,10 +215,10 @@ export default function Asistencia({ darkMode }) {
             {/* Breadcrumbs */}
             <Breadcrumbs darkMode={darkMode} paths={breadcrumbsPaths} />
             <Typography variant="h4" className={`mb-1 ${textColor}`}>
-                Servicios
+                Asistencia
             </Typography>
             <Typography variant="paragraph" className={`mb-2 ${subTextColor}`}>
-                Administra los servicios en ejecucion
+                Administra el control de asistencia
             </Typography>
             <hr className="my-2 border-gray-800" />
 
