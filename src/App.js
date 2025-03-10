@@ -27,6 +27,10 @@ import AsistenciaDetails from "./pages/asistencia/AsistenciaDetails"
 import AsistenciaRegister from "./pages/asistencia/AsistenciaRegister"
 import RegisterModule from "./pages/modules/RegisterModule"
 import Expenses from "./pages/expenses/Expenses"
+import Category from "./pages/category/Categories"
+import CategoryRegister from "./pages/category/CategoryRegister"
+import ExpensesRegister from "./pages/expenses/ExpensesRegister"
+
 
 const App = () => {
   return (
@@ -150,7 +154,7 @@ const AppContent = () => {
               </Layout>
             }
           />
-          
+
           <Route
             path="/app-modules/register"
             element={
@@ -223,12 +227,37 @@ const AppContent = () => {
               </Layout>
             }
           />
-          
+
           <Route
             path="/expenses"
             element={
               <Layout darkMode={darkMode} toggleDarkMode={toggleDarkMode} onLogout={handleLogout}>
                 <Expenses darkMode={darkMode} />
+              </Layout>
+            }
+          />
+          <Route
+            path="/expenses/register"
+            element={
+              <Layout darkMode={darkMode} toggleDarkMode={toggleDarkMode} onLogout={handleLogout}>
+                <ExpensesRegister darkMode={darkMode} />
+              </Layout>
+            }
+          />
+
+          <Route
+            path="/categories"
+            element={
+              <Layout darkMode={darkMode} toggleDarkMode={toggleDarkMode} onLogout={handleLogout}>
+                <Category darkMode={darkMode} />
+              </Layout>
+            }
+          />
+          <Route
+            path="/categories/register"
+            element={
+              <Layout darkMode={darkMode} toggleDarkMode={toggleDarkMode} onLogout={handleLogout}>
+                <CategoryRegister darkMode={darkMode} />
               </Layout>
             }
           />

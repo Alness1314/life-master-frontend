@@ -5,18 +5,14 @@ import { useNavigate } from "react-router-dom";
 import SweetAlert2 from '../../components/SweetAlert2';
 import { EyeIcon, PencilSquareIcon, TrashIcon, PlusIcon } from "@heroicons/react/24/solid"; // Íconos de Heroicons
 import Breadcrumbs from "../../components/Breadcrumbs"; // Importa el componente Breadcrumbs
-import { jwtDecode } from "jwt-decode";
 
-export default function Expenses({ darkMode }) {
+export default function Category({ darkMode }) {
     const [token] = useState(localStorage.getItem("token")); // Estado para rastrear el token
     const [data, setData] = useState([]); // Estado para los datos
     const [loading, setLoading] = useState(true); // Estado para el indicador de carga
     const [error, setError] = useState(null); // Estado para manejar errores
     const navigate = useNavigate();
 
-    const decodedToken = jwtDecode(token);
-    const userId = decodedToken.id;
-   
     const textColor = darkMode ? "text-white" : "text-gray-900";
     const subTextColor = darkMode ? "text-blue-gray-200" : "text-blue-grey";
 
@@ -25,11 +21,11 @@ export default function Expenses({ darkMode }) {
         if (!token) return;
         try {
             setLoading(true); // Activar el indicador de carga
-            const response = await fetch(`${process.env.REACT_APP_API_URL}${process.env.REACT_APP_API_PREFIX}/usuarios/${userId}/expenses`, {
+            const response = await fetch(`${process.env.REACT_APP_API_URL}${process.env.REACT_APP_API_PREFIX}/category`, {
                 headers: { Authorization: `Bearer ${token}` },
             }); // Reemplaza con tu endpoint
 
-        
+
             if (!response.ok) {
                 throw new Error("Error al obtener los datos");
             }
@@ -54,32 +50,18 @@ export default function Expenses({ darkMode }) {
             accessorKey: "id", // La clave debe coincidir con el campo en los datos
         },
         {
-            header: "Banco o Entidad",
-            accessorKey: "bankOrEntity",
+            header: "Nombre",
+            accessorKey: "name",
         },
         {
             header: "Descripcion",
             accessorKey: "description",
         },
         {
-            header: "Cantidad",
-            accessorKey: "amount",
-        },
-        {
-            header: "Fecha de pago",
-            accessorKey: "paymentDate",
-            cell: ({ getValue }) => new Date(getValue()).toLocaleDateString(), // Formatear la fecha
-          },
-          {
-            header: "Categoria",
-            accessorKey: "category", // Accede a la lista de perfiles
-            cell:({ getValue }) => (getValue()!=null ? getValue().name : "No Disponible") ,
-          },
-          {
             header: "Fecha de Creación",
             accessorKey: "createAt",
             cell: ({ getValue }) => new Date(getValue()).toLocaleDateString(), // Formatear la fecha
-          },
+        },
         {
             header: "Acciones",
             cell: ({ row }) => (
@@ -163,14 +145,14 @@ export default function Expenses({ darkMode }) {
 
     // Función para redirigir al formulario de registro
     const handleAddMeasurementSystem = () => {
-        navigate("/expenses/register");
+        navigate("/categories/register");
     };
 
     // Generar las rutas para el Breadcrumbs
     const breadcrumbsPaths = [
         {
             name: "Home",
-            route: "/dashboard",
+            route: "/settings",
             icon: (
                 <svg
                     xmlns="http://www.w3.org/2000/svg"
@@ -183,8 +165,8 @@ export default function Expenses({ darkMode }) {
             ),
         },
         {
-            name: "Gastos",
-            route: "/expenses",
+            name: "Categorias",
+            route: "/categories",
         },
     ];
 
@@ -193,10 +175,10 @@ export default function Expenses({ darkMode }) {
             {/* Breadcrumbs */}
             <Breadcrumbs darkMode={darkMode} paths={breadcrumbsPaths} />
             <Typography variant="h4" className={`mb-1 ${textColor}`}>
-            Gastos
+                Categorias
             </Typography>
             <Typography variant="paragraph" className={`mb-2 ${subTextColor}`}>
-                Administra tus gastos de manera efectiva
+                Crea categorias para usarlas en otros modulos
             </Typography>
             <hr className="my-2 border-gray-800" />
 
