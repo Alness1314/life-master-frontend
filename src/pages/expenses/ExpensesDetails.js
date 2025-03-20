@@ -7,36 +7,38 @@ import {
     Typography,
     Spinner
 } from "@material-tailwind/react";
-import DynamicTable from "../../components/DynamicTable"; // Importar el componente de tabla dinámica
 import Breadcrumbs from "../../components/Breadcrumbs"; // Importa el componente Breadcrumbs
+import { jwtDecode } from "jwt-decode";
 
-export default function MeasurementDetails({ darkMode }) {
-    const { id } = useParams(); // Obtener el ID del usuario desde la URL
+export default function ExpensesDetails({ darkMode }) {
+    const { expensesId } = useParams(); // Obtener el ID del usuario desde la URL
     const [token] = useState(localStorage.getItem("token")); // Estado para rastrear el token
-    const [measurementData, setMeasurementData] = useState(null);
+    const [moduleData, setModuleData] = useState(null);
     const bgColor = darkMode ? "bg-gray-900" : "bg-white";
     const textColor = darkMode ? "text-white" : "text-gray-900";
     const subTextColor = darkMode ? "text-blue-gray-200" : "text-blue-grey";
     const cardBgColor = darkMode ? "bg-gray-800 border-gray-700" : "bg-gray-100 border-gray-200";
 
+    const decodedToken = jwtDecode(token);
+    const userId = decodedToken.id;
+
     useEffect(() => {
-        // Simulando la obtención de datos desde una API
         const fetchData = async () => {
             try {
-                const response = await fetch(`${process.env.REACT_APP_API_URL}${process.env.REACT_APP_API_PREFIX}/measurementsystems/${id}`, {
+                const response = await fetch(`${process.env.REACT_APP_API_URL}${process.env.REACT_APP_API_PREFIX}/usuarios/${userId}/expenses/${expensesId}`, {
                     headers: { Authorization: `Bearer ${token}` },
                 });
                 const data = await response.json();
-                setMeasurementData(data);
+                setModuleData(data);
             } catch (error) {
                 console.error("Error fetching measurement data:", error);
             }
         };
 
         fetchData();
-    }, [id]);
+    }, [expensesId]);
 
-    if (!measurementData) {
+    if (!moduleData) {
         return (
             <div className="flex items-center justify-center h-screen">
                 <Spinner color="indigo" className="h-10 w-10" />
@@ -45,11 +47,13 @@ export default function MeasurementDetails({ darkMode }) {
 
     // Definir los campos que queremos mostrar dinámicamente
     const fieldsToDisplay = [
-        { label: "Nombre", key: "tag" },
-        { label: "Tipo de conexión", key: "connectionType" },
-        { label: "Elemento", key: "elementType" },
-        { label: "Operación", key: "opsType" },
-        { label: "Estado", key: "status", format: (value) => (value ? "Active" : "Inactive") },
+        { label: "Banco o Entidad", key: "bankOrEntity" },
+        { label: "Descripcion", key: "description" },
+        { label: "Cantidad", key: "amount" },
+        { label: "Fecha de pago", key: "paymentDate" },
+        { label: "Categoria", key: "category", format: (value) => value.name },
+        { label: "Estado del pago", key: "paymentStatus", format: (value) => (value ? "Pagado" : "Pendiente") },
+        { label: "Fecha y hora de creación", key: "createAt" },
     ];
 
     // Función para renderizar los campos dinámicamente
@@ -61,7 +65,7 @@ export default function MeasurementDetails({ darkMode }) {
 
             return (
                 <div key={index}>
-                    <p className="text-gray-900 dark:text-gray-100 font-semibold">{field.label}:</p>
+                    <p className="text-gray-900 dark:text-gray-100 font-semibold  ">{field.label}:</p>
                     <p className="text-gray-700 dark:text-gray-400">
                         {field.format ? field.format(value) : value}
                     </p>
@@ -73,8 +77,8 @@ export default function MeasurementDetails({ darkMode }) {
     // Generar las rutas para el Breadcrumbs
     const breadcrumbsPaths = [
         {
-            name: "Home",
-            route: "/Dashboard",
+            name: "Catálogos",
+            route: "/dashboard",
             icon: (
                 <svg
                     xmlns="http://www.w3.org/2000/svg"
@@ -87,21 +91,13 @@ export default function MeasurementDetails({ darkMode }) {
             ),
         },
         {
-            name: "Sistemas de Medición",
-            route: "/measurement-system",
+            name: "Gastos",
+            route: "/expenses",
         },
         {
-            name: "Sistema de Medición",
-            route: "/measurement-system/details/:id",
-        },
-    ];
-
-    // Definir las columnas para la tabla de registros Modbus
-    const modbusRegisterColumns = [
-        { header: "Tag", accessorKey: "name" },
-        { header: "Registro", accessorKey: "addressStart" },
-        { header: "Codigo de función", accessorKey: "functionCode" },
-        { header: "Tipo de Dato", accessorKey: "dataType" },
+            name: "Detalle",
+            route: `/expenses/details/${expensesId}`,
+        }
     ];
 
     return (
@@ -109,60 +105,39 @@ export default function MeasurementDetails({ darkMode }) {
             {/* Breadcrumbs */}
             <Breadcrumbs darkMode={darkMode} paths={breadcrumbsPaths} />
             <Typography variant="h4" className={`mb-1 ${textColor}`}>
-                Sistema de Medición
+                Gasto
             </Typography>
             <Typography variant="paragraph" className={`mb-2 ${subTextColor}`}>
-                Detalle del sistema de medición
+                Detalle del gasto registrado
             </Typography>
             <hr className="my-2 border-gray-800" />
-
-            {/* Contenedor principal de la Card */}
-            <div className={`${bgColor}`}>
-                <div className={`mt-2 ${cardBgColor} rounded-lg shadow-lg h-full overflow-hidden`}>
-                    <Card shadow={false} className={`w-full h-full ${cardBgColor}`}>
+            <div className={`${bgColor} max-h-screen grid grid-cols-12 items-center justify-center m-1`}>
+                <div className={`mt-2 col-span-12 col-start-1 ${cardBgColor} rounded-lg shadow-lg`}>
+                    <Card shadow={false} className={`w-full max-w-screen ${cardBgColor}`}>
                         <CardHeader
                             color="transparent"
                             floated={false}
                             shadow={false}
-                            className="mx-0 flex items-center gap-4 pt-0 pb-0"
+                            className="mx-0 flex items-center gap-6 pt-0 pb-0"
                         >
                             <img
                                 size="lg"
-                                src="/icons/INVENTORY.png"
-                                alt="measurement-system"
-                                className="pt-1 ml-10 mb-2"
+                                src="/icons/PFL.png"
+                                alt="usuario"
+                                className="mt-0 ml-10 mb-2"
                             />
                             <div className="flex w-full flex-col gap-0.5">
                                 <div className="flex items-center justify-between">
                                     <Typography variant="h5" className="text-blue-gray dark:text-gray-300">
-                                        Sistema de Medicion
+                                        Gasto
                                     </Typography>
                                 </div>
-                                <Typography className="text-blue-gray dark:text-gray-300">{id}</Typography>
+                                <Typography className="text-blue-gray dark:text-gray-300">{expensesId}</Typography>
                             </div>
                         </CardHeader>
-
-                        {/* CardBody con scroll interno */}
-                        <CardBody className="ml-12 mb-2 mr-10 mt-1 p-0 ">
-                            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
-                                {renderFields(fieldsToDisplay, measurementData)}
-                            </div>
-
-                            <hr className="my-4 border-gray-300" />
-
-                            {/* Tabla de registros Modbus */}
-                            <div className="mt-4 p-0 m-0">
-                                <Typography variant="h6" className="mb-0 ml-4 text-blue-gray dark:text-gray-300">
-                                    Modbus Registers
-                                </Typography>
-                                <DynamicTable
-                                    columns={modbusRegisterColumns}
-                                    data={measurementData.modbusRegisters}
-                                    loading={false}
-                                    error={null}
-                                    pageSize={4} // Limitar a 5 registros por página
-                                    className="w-full"
-                                />
+                        <CardBody className="ml-12 mb-10 mr-10 mt-4 p-0">
+                            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8">
+                                {renderFields(fieldsToDisplay, moduleData)}
                             </div>
                         </CardBody>
                     </Card>

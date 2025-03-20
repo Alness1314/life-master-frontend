@@ -135,7 +135,7 @@ export default function Asistencia({ darkMode }) {
     };
 
     const handleUpdate = (id) => {
-        navigate(`/asistencia/details/${id}`);
+        navigate(`/asistencia/edit/${id}`);
     };
 
     const handleDelete = async (id) => {
@@ -191,7 +191,7 @@ export default function Asistencia({ darkMode }) {
     // Generar las rutas para el Breadcrumbs
     const breadcrumbsPaths = [
         {
-            name: "Home",
+            name: "Catálogos",
             route: "/Dashboard",
             icon: (
                 <svg

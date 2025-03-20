@@ -109,7 +109,7 @@ export default function Expenses({ darkMode }) {
 
     // Funciones para manejar acciones
     const handleDetails = (id) => {
-        navigate(`/measurement-system/details/${id}`);
+        navigate(`/expenses/details/${id}`);
     };
 
     const handleUpdate = (id) => {
@@ -169,7 +169,7 @@ export default function Expenses({ darkMode }) {
     // Generar las rutas para el Breadcrumbs
     const breadcrumbsPaths = [
         {
-            name: "Home",
+            name: "Catálogos",
             route: "/dashboard",
             icon: (
                 <svg

@@ -1,6 +1,6 @@
 import React, { useEffect } from 'react';
 import { useForm, Controller } from 'react-hook-form';
-import { TextField, MenuItem, Button, Grid } from '@mui/material';
+import { TextField, MenuItem, Button, Grid2 } from '@mui/material';
 import { TimePicker } from '@mui/x-date-pickers/TimePicker';
 import { DatePicker } from '@mui/x-date-pickers/DatePicker';
 import { DateTimePicker } from '@mui/x-date-pickers/DateTimePicker';
@@ -21,32 +21,58 @@ const DynamicForm = ({ fields, onSubmit, initialValues, darkMode = false }) => {
         return span;
     };
 
+    // Función para convertir nombres de campos con notación de puntos en un objeto anidado
+    const buildNestedObject = (data) => {
+        const result = {};
+        for (const key in data) {
+            if (key.includes('.')) {
+                const keys = key.split('.');
+                let current = result;
+                for (let i = 0; i < keys.length - 1; i++) {
+                    const nestedKey = keys[i];
+                    if (!current[nestedKey]) {
+                        current[nestedKey] = {};
+                    }
+                    current = current[nestedKey];
+                }
+                current[keys[keys.length - 1]] = data[key];
+            } else {
+                result[key] = data[key];
+            }
+        }
+        return result;
+    };
+
     const handleFormSubmit = (data) => {
+        // Construir el objeto anidado
+        const nestedData = buildNestedObject(data);
+
         // Formatear los valores antes de enviarlos
         const formattedData = {};
-        Object.keys(data).forEach((key) => {
-            const field = fields.find((f) => f.name === key);
+        Object.keys(nestedData).forEach((key) => {
+            const field = fields.find((f) => f.name === key || f.name.startsWith(key + '.'));
             if (field) {
                 if (field.type === 'date') {
-                    formattedData[key] = dayjs(data[key]).format('YYYY-MM-DD'); // Solo fecha
+                    formattedData[key] = dayjs(nestedData[key]).format('YYYY-MM-DD'); // Solo fecha
                 } else if (field.type === 'time') {
-                    formattedData[key] = dayjs(data[key]).format('HH:mm:ss'); // Solo hora
+                    formattedData[key] = dayjs(nestedData[key]).format('HH:mm:ss'); // Solo hora
                 } else if (field.type === 'datetime') {
-                    formattedData[key] = dayjs(data[key]).toISOString(); // Fecha y hora
+                    formattedData[key] = dayjs(nestedData[key]).toISOString(); // Fecha y hora
                 } else {
-                    formattedData[key] = data[key]; // Otros campos
+                    formattedData[key] = nestedData[key]; // Otros campos
                 }
             }
         });
+
         onSubmit(formattedData); // Enviar datos formateados
     };
 
     return (
         <LocalizationProvider dateAdapter={AdapterDayjs}>
             <form onSubmit={handleSubmit(handleFormSubmit)}>
-                <Grid container spacing={3} style={{ padding: '24px' }}>
+                <Grid2 container spacing={3} style={{ padding: '24px' }}>
                     {fields.map((field, index) => (
-                        <Grid item xs={getColumnClass(field.span)} key={index}>
+                        <Grid2 item size={getColumnClass(field.span)} key={index}>
                             {field.type === 'dropdown' ? (
                                 <Controller
                                     name={field.name}
@@ -105,7 +131,7 @@ const DynamicForm = ({ fields, onSubmit, initialValues, darkMode = false }) => {
                                         <DateTimePicker
                                             label={field.label}
                                             value={value ? dayjs(value) : null}
-                                             size="small"
+                                            size="small"
                                             onChange={(newValue) => onChange(newValue)}
                                             sx={{
                                                 width: '100%', // Asegura que ocupe todo el ancho
@@ -139,7 +165,7 @@ const DynamicForm = ({ fields, onSubmit, initialValues, darkMode = false }) => {
                                         <DatePicker
                                             label={field.label}
                                             value={value ? dayjs(value) : null}
-                                             size="small"
+                                            size="small"
                                             onChange={(newValue) => onChange(newValue)}
                                             sx={{
                                                 width: '100%', // Asegura que ocupe todo el ancho
@@ -172,7 +198,7 @@ const DynamicForm = ({ fields, onSubmit, initialValues, darkMode = false }) => {
                                     render={({ field: { onChange, value } }) => (
                                         <TimePicker
                                             label={field.label}
-                                             size="small"
+                                            size="small"
                                             value={value ? dayjs(value) : null}
                                             onChange={(newValue) => onChange(newValue)}
                                             views={field.views || ['hours', 'minutes']}
@@ -240,14 +266,14 @@ const DynamicForm = ({ fields, onSubmit, initialValues, darkMode = false }) => {
                                     )}
                                 />
                             )}
-                        </Grid>
+                        </Grid2>
                     ))}
-                    <Grid item xs={12} style={{ display: 'flex', justifyContent: 'flex-end' }}>
-                        <Button type="submit" variant="contained" color="primary" size='medium'>
+                    <Grid2 item size={12} style={{ display: 'flex', justifyContent: 'flex-end' }}>
+                        <Button type="submit" variant="contained" color="primary" size='large'>
                             Enviar
                         </Button>
-                    </Grid>
-                </Grid>
+                    </Grid2>
+                </Grid2>
             </form>
         </LocalizationProvider>
     );

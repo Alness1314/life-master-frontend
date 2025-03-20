@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { useNavigate, useLocation } from 'react-router-dom';
+import { useNavigate, useLocation, useParams } from 'react-router-dom';
 import DynamicForm from '../../components/DynamicForm';
 import Swal from 'sweetalert2';
 import { Typography, Spinner } from '@material-tailwind/react';
@@ -9,8 +9,10 @@ import { jwtDecode } from "jwt-decode";
 // Estado global simulado (puedes usar Context API o Redux en su lugar)
 let cachedProfileOptions = null;
 
-const AsistenciaRegister = ({ darkMode }) => {
+const AsistenciaEdit = ({ darkMode }) => {
     const navigate = useNavigate();
+    const { asistanceId } = useParams(); // Obtener el ID del usuario desde la URL
+    const [initialData, setInitialData] = useState(null); // Estado para almacenar los datos iniciales del usuario
     const [token] = useState(localStorage.getItem('token')); // Estado para rastrear el token
     const [loading, setLoading] = useState(false); // Estado para manejar la carga de datos
 
@@ -21,6 +23,29 @@ const AsistenciaRegister = ({ darkMode }) => {
 
     const decodedToken = jwtDecode(token);
     const userId = decodedToken.id;
+
+    // Cargar los datos del usuario cuando el diálogo se abre
+    useEffect(() => {
+        if (userId) {
+            const fetchUserData = async () => {
+                try {
+                    const response = await fetch(`${process.env.REACT_APP_API_URL}${process.env.REACT_APP_API_PREFIX}/usuarios/${userId}/assistance/${asistanceId}`, {
+                        headers: {
+                            Authorization: `Bearer ${token}`,
+                        },
+                    });
+                    const data = await response.json();
+                    if (!response.ok) {
+                        throw new Error(data.message || 'Error al cargar los datos del usuario');
+                    }
+                    setInitialData(data);
+                } catch (error) {
+                    console.error(error);
+                }
+            };
+            fetchUserData();
+        }
+    }, [userId, token]);
 
     // Generar las rutas para el Breadcrumbs
     const breadcrumbsPaths = [
@@ -43,8 +68,8 @@ const AsistenciaRegister = ({ darkMode }) => {
             route: "/asistencia",
         },
         {
-            name: "Registro",
-            route: "/asistencia/register",
+            name: "Editar",
+            route: `/asistencia/edit//${asistanceId}`,
         },
     ];
 
@@ -186,7 +211,7 @@ const AsistenciaRegister = ({ darkMode }) => {
             {/* Formulario Dinámico */}
             <div className={`${bgColor} max-h-screen grid grid-cols-12 items-center justify-center`}>
                 <div className={`mt-2 col-span-12 col-start-1 ${cardBgColor} rounded-lg shadow-lg`}>
-                    <DynamicForm fields={formFields} onSubmit={handleSubmit} darkMode={darkMode} />
+                    <DynamicForm fields={formFields} onSubmit={handleSubmit} initialValues={initialData} darkMode={darkMode} />
                 </div>
 
             </div>
@@ -194,4 +219,4 @@ const AsistenciaRegister = ({ darkMode }) => {
     );
 };
 
-export default AsistenciaRegister;
+export default AsistenciaEdit;

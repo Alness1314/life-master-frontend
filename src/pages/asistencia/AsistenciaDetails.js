@@ -80,7 +80,7 @@ export default function AsistenciaDetails({ darkMode }) {
     // Generar las rutas para el Breadcrumbs
     const breadcrumbsPaths = [
         {
-            name: "Home",
+            name: "Catálogos",
             route: "/Dashboard",
             icon: (
                 <svg
@@ -98,7 +98,7 @@ export default function AsistenciaDetails({ darkMode }) {
             route: "/asistencia",
         },
         {
-            name: "Detalle Asistencia",
+            name: "Detalle",
             route: `/asistencia/details/${asistanceId}`,
         },
     ];

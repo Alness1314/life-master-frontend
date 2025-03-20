@@ -9,17 +9,9 @@ import Users from "./pages/users/Users";
 import RegisterUsers from "./pages/users/RegisterUsers"
 import Settings from "./pages/Settings";
 import { AuthProvider, AuthContext } from "./context/AuthContext"; // Importar AuthContext
-import MeasurementSystem from "./pages/measurement/MeasurementSystem";
 import EditUser from "./pages/users/EditUsers";
-import Connections from "./pages/connection/Connections";
-import ModbusConnection from "./pages/connection/modbus/ModbusConnection";
-import OpcConnection from "./pages/connection/opc/OpcConnection";
-import JobServices from "./pages/jobs/JobServices"
-import MeasurementDetails from "./pages/measurement/MeasurementDetails";
 import UserDetails from "./pages/users/UserDetails";
 import ModuleDetails from "./pages/modules/ModulesDetails";
-import LinkConfig from "./pages/linkcv/LinkConfig";
-import UnregisteredOperations from "./pages/UnregisteredOperations";
 import Modules from "./pages/modules/Modules"
 import VariableSettings from "./pages/settings/VariableSettings"
 import Asistencia from "./pages/asistencia/Asistencia"
@@ -30,6 +22,8 @@ import Expenses from "./pages/expenses/Expenses"
 import Category from "./pages/category/Categories"
 import CategoryRegister from "./pages/category/CategoryRegister"
 import ExpensesRegister from "./pages/expenses/ExpensesRegister"
+import AsistenciaEdit from "./pages/asistencia/AsistenciaEdit"
+import ExpensesDetails from "./pages/expenses/ExpensesDetails"
 
 
 const App = () => {
@@ -137,15 +131,6 @@ const AppContent = () => {
               </Layout>
             }
           />
-
-          <Route
-            path="/measurement-system/details/:id"
-            element={
-              <Layout darkMode={darkMode} toggleDarkMode={toggleDarkMode} onLogout={handleLogout}>
-                <MeasurementDetails darkMode={darkMode} />
-              </Layout>
-            }
-          />
           <Route
             path="/app-modules"
             element={
@@ -220,6 +205,15 @@ const AppContent = () => {
             }
           />
           <Route
+            path="/asistencia/edit/:asistanceId"
+            element={
+              <Layout darkMode={darkMode} toggleDarkMode={toggleDarkMode} onLogout={handleLogout}>
+                <AsistenciaEdit darkMode={darkMode} />
+              </Layout>
+            }
+          />
+          
+          <Route
             path="/asistencia/register"
             element={
               <Layout darkMode={darkMode} toggleDarkMode={toggleDarkMode} onLogout={handleLogout}>
@@ -233,6 +227,14 @@ const AppContent = () => {
             element={
               <Layout darkMode={darkMode} toggleDarkMode={toggleDarkMode} onLogout={handleLogout}>
                 <Expenses darkMode={darkMode} />
+              </Layout>
+            }
+          />
+          <Route
+            path="/expenses/details/:expensesId"
+            element={
+              <Layout darkMode={darkMode} toggleDarkMode={toggleDarkMode} onLogout={handleLogout}>
+                <ExpensesDetails darkMode={darkMode} />
               </Layout>
             }
           />

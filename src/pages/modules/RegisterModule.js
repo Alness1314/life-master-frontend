@@ -23,8 +23,8 @@ const RegisterModule = ({ darkMode }) => {
     // Generar las rutas para el Breadcrumbs
     const breadcrumbsPaths = [
         {
-            name: "Home",
-            route: "/Dashboard",
+            name: "Configuración",
+            route: "/settings",
             icon: (
                 <svg
                     xmlns="http://www.w3.org/2000/svg"
@@ -37,12 +37,12 @@ const RegisterModule = ({ darkMode }) => {
             ),
         },
         {
-            name: "Usuarios",
-            route: "/users",
+            name: "Módulos",
+            route: "/app-modules",
         },
         {
-            name: "Registro de Usuario",
-            route: "/users/register",
+            name: "Registro",
+            route: "/app-modules/register",
         },
     ];
 
@@ -198,10 +198,10 @@ const RegisterModule = ({ darkMode }) => {
 
             {/* Título y Subtítulo */}
             <Typography variant="h4" className={`mb-1 ${textColor}`}>
-                Registro de Usuario
+                Registro de Módulos
             </Typography>
             <Typography variant="paragraph" className={`mb-2 ${subTextColor}`}>
-                Completa el formulario para registrar un nuevo usuario
+                Completa el formulario para registrar un nuevo módulo
             </Typography>
             <hr className="my-2 border-gray-800" />
 

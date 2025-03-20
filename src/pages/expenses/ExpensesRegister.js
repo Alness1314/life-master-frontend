@@ -26,7 +26,7 @@ const ExpensesRegister = ({ darkMode }) => {
     // Generar las rutas para el Breadcrumbs
     const breadcrumbsPaths = [
         {
-            name: "Home",
+            name: "Catálogos",
             route: "/Dashboard",
             icon: (
                 <svg
@@ -44,7 +44,7 @@ const ExpensesRegister = ({ darkMode }) => {
             route: "/expenses",
         },
         {
-            name: "Registro de gastos",
+            name: "Registro",
             route: "/expenses/register",
         },
     ];
@@ -126,7 +126,7 @@ const ExpensesRegister = ({ darkMode }) => {
         },
         {
             value: false,
-            label: "No Pagado",
+            label: "Pendiente",
         }
     ]
 
