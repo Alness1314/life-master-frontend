@@ -24,6 +24,14 @@ import CategoryRegister from "./pages/category/CategoryRegister"
 import ExpensesRegister from "./pages/expenses/ExpensesRegister"
 import AsistenciaEdit from "./pages/asistencia/AsistenciaEdit"
 import ExpensesDetails from "./pages/expenses/ExpensesDetails"
+import Incomes from "./pages/incomes/Incomes"
+import IncomeRegister from "./pages/incomes/IncomesRegister"
+import IncomesDetails from "./pages/incomes/IncomesDetails"
+import Notes from "./pages/notes/Notes"
+import NotesRegister from "./pages/notes/NotesRegister";
+import NotesDetails from "./pages/notes/NotesDetails";
+import Vault from "./pages/vault/Vault";
+import VaultRegister from "./pages/vault/VaultRegister";
 
 
 const App = () => {
@@ -260,6 +268,70 @@ const AppContent = () => {
             element={
               <Layout darkMode={darkMode} toggleDarkMode={toggleDarkMode} onLogout={handleLogout}>
                 <CategoryRegister darkMode={darkMode} />
+              </Layout>
+            }
+          />
+          <Route
+            path="/incomes"
+            element={
+              <Layout darkMode={darkMode} toggleDarkMode={toggleDarkMode} onLogout={handleLogout}>
+                <Incomes darkMode={darkMode} />
+              </Layout>
+            }
+          />
+          <Route
+            path="/incomes/register"
+            element={
+              <Layout darkMode={darkMode} toggleDarkMode={toggleDarkMode} onLogout={handleLogout}>
+                <IncomeRegister darkMode={darkMode} />
+              </Layout>
+            }
+          />
+          <Route
+            path="/incomes/details/:incomeId"
+            element={
+              <Layout darkMode={darkMode} toggleDarkMode={toggleDarkMode} onLogout={handleLogout}>
+                <IncomesDetails darkMode={darkMode} />
+              </Layout>
+            }
+          />
+          <Route
+            path="/notes"
+            element={
+              <Layout darkMode={darkMode} toggleDarkMode={toggleDarkMode} onLogout={handleLogout}>
+                <Notes darkMode={darkMode} />
+              </Layout>
+            }
+          />
+          <Route
+            path="/notes/register"
+            element={
+              <Layout darkMode={darkMode} toggleDarkMode={toggleDarkMode} onLogout={handleLogout}>
+                <NotesRegister darkMode={darkMode} />
+              </Layout>
+            }
+          />
+          <Route
+            path="/notes/details/:noteId"
+            element={
+              <Layout darkMode={darkMode} toggleDarkMode={toggleDarkMode} onLogout={handleLogout}>
+                <NotesDetails darkMode={darkMode} />
+              </Layout>
+            }
+          />
+          <Route
+            path="/vault"
+            element={
+              <Layout darkMode={darkMode} toggleDarkMode={toggleDarkMode} onLogout={handleLogout}>
+                <Vault darkMode={darkMode} />
+              </Layout>
+            }
+          />
+          <Route
+            path="/vault/register"
+            element={
+              <Layout darkMode={darkMode} toggleDarkMode={toggleDarkMode} onLogout={handleLogout}>
+                <VaultRegister darkMode={darkMode} />
               </Layout>
             }
           />

@@ -10,12 +10,12 @@ import { ArrowLeftStartOnRectangleIcon } from "@heroicons/react/24/outline";
 import { useNavigate } from "react-router-dom";
 
 export function Sidebar({
-  brandName,
   brandLogo,
   menuItems,
   footerContent,
   darkMode,
   onCloseSidebar, // Función para cerrar la barra lateral en modo móvil
+  onLogout
 }) {
   const navigate = useNavigate();
 
@@ -24,7 +24,7 @@ export function Sidebar({
   const iconColor = darkMode ? "text-white" : "text-black";
   const hoverStyles = darkMode
     ? "hover:bg-opacity-20 hover:text-white"
-    : "hover:bg-gray-300 hover:text-black"; 
+    : "hover:bg-gray-300 hover:text-black";
 
   return (
     <div className={`h-screen flex items-center justify-center bg-white dark:bg-gray-900 shadow-xl shadow-blue-gray-500/10 dark:shadow-blue-gray-500/5 border border-black/15`}>
@@ -66,6 +66,10 @@ export function Sidebar({
           <List>
             <ListItem
               className={`${textColor} ${hoverStyles} focus:${hoverStyles} active:${hoverStyles}`}
+              onClick={() => {
+                onLogout();
+                navigate("/");
+              }}
             >
               <ListItemPrefix>
                 <ArrowLeftStartOnRectangleIcon

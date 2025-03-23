@@ -1,7 +1,7 @@
-import React, { useEffect, useState } from 'react';
+import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import DynamicForm from '../../components/DynamicForm';
-import { Typography, Spinner } from '@material-tailwind/react';
+import { Typography } from '@material-tailwind/react';
 import Breadcrumbs from '../../components/Breadcrumbs';
 import { jwtDecode } from "jwt-decode";
 import PropTypes from 'prop-types';
@@ -9,15 +9,13 @@ import apiService from '../../service/ApiService';
 import SweetAlert2 from '../../components/SweetAlert2';
 
 
-const ExpensesRegister = ({ darkMode }) => {
-    ExpensesRegister.propTypes = {
+const IncomeRegister = ({ darkMode }) => {
+    IncomeRegister.propTypes = {
         darkMode: PropTypes.bool.isRequired, // O PropTypes.bool si no es obligatorio
     };
 
     const navigate = useNavigate();
     const [token] = useState(localStorage.getItem('token')); // Estado para rastrear el token
-    const [loading, setLoading] = useState(false); // Estado para manejar la carga de datos
-    const [categoryOptions, setCategoryOptions] = useState([]);
 
     const bgColor = darkMode ? "bg-gray-900" : "bg-white";
     const textColor = darkMode ? "text-white" : "text-gray-900";
@@ -44,46 +42,29 @@ const ExpensesRegister = ({ darkMode }) => {
             ),
         },
         {
-            name: "Gastos",
-            route: "/expenses",
+            name: "Ingresos",
+            route: "/incomes",
         },
         {
             name: "Registro",
-            route: "/expenses/register",
+            route: "/incomes/register",
         },
     ];
 
-    const fetchDataCategories = () => {
-        apiService.get(`${process.env.REACT_APP_API_URL}${process.env.REACT_APP_API_PREFIX}/category`, null, true)
-            .then(response => {
-                const mappedCategory = response.data.map((category) => ({
-                    value: category.id,
-                    label: category.name,
-                }));
-                setCategoryOptions(mappedCategory)
-            })
-            .catch(error => console.error('Error fetching profiles:', error))
-            .finally(setLoading(false))
-    }
-
-    useEffect(() => {
-        fetchDataCategories()
-    }, []);
-
     const handleSubmit = async (formData) => {
-        apiService.post(`${process.env.REACT_APP_API_URL}${process.env.REACT_APP_API_PREFIX}/usuarios/${userId}/expenses`, formData, true)
+        apiService.post(`${process.env.REACT_APP_API_URL}${process.env.REACT_APP_API_PREFIX}/usuarios/${userId}/income`, formData, true)
             .then(response => {
                 if (response.status !== 201) {
-                    throw new Error(response.data.message || 'Error al registrar el gasto');
+                    throw new Error(response.data.message || 'Error al registrar el ingreso');
                 }
                 SweetAlert2({
                     title: 'Éxito',
-                    text: 'Gasto registrado correctamente',
+                    text: 'Ingreso registrado correctamente',
                     icon: 'success',
                     confirmButtonColor: "#3bdb39",
                     confirmButtonText: 'Aceptar',
                 });
-                navigate('/expenses');
+                navigate('/incomes');
             })
             .catch(error => {
                 SweetAlert2({
@@ -96,38 +77,11 @@ const ExpensesRegister = ({ darkMode }) => {
             })
     };
 
-    const optionsArray = [
-        {
-            value: true,
-            label: "Pagado",
-        },
-        {
-            value: false,
-            label: "Pendiente",
-        }
-    ]
-
     const formFields = [
         {
-            type: 'dropdown',
-            name: 'category',
-            label: 'Categoria',
-            required: true,
-            span: 4,
-            options: categoryOptions,
-            multiple: false, // Indicar que es un dropdown múltiple
-        },
-        {
-            name: 'bankOrEntity',
-            label: 'Banco o Entidad',
+            name: 'source',
+            label: 'Fuente de ingreso',
             type: 'text',
-            span: 4, // Ocupa la mitad del espacio
-            required: true,
-        },
-        {
-            name: 'amount',
-            label: 'Cantidad',
-            type: 'number',
             span: 4, // Ocupa la mitad del espacio
             required: true,
         },
@@ -135,36 +89,24 @@ const ExpensesRegister = ({ darkMode }) => {
             name: 'description',
             label: 'Descripcion',
             type: 'text',
-            span: 12, // Ocupa la mitad del espacio
+            span: 8, // Ocupa la mitad del espacio
             required: true,
         },
-
-
+        {
+            name: 'amount',
+            label: 'Cantidad',
+            type: 'number',
+            span: 6, // Ocupa la mitad del espacio
+            required: true,
+        },
         {
             type: 'date',
             name: 'paymentDate',
             label: 'Fecha de pago',
             required: false,
             span: 6,
-        },
-        {
-            type: 'dropdown',
-            name: 'paymentStatus',
-            label: 'Estado del pago',
-            required: false,
-            span: 6,
-            options: optionsArray,
-            multiple: false, // Indicar que es un dropdown múltiple
         }
     ];
-
-    // Si está cargando, mostramos un mensaje de carga
-    if (loading) {
-        return (
-            <div className="flex items-center justify-center h-screen">
-                <Spinner color="indigo" className="h-10 w-10" />
-            </div>);
-    }
 
     return (
         <div className={`${bgColor} max-h-screen`}>
@@ -173,10 +115,10 @@ const ExpensesRegister = ({ darkMode }) => {
 
             {/* Título y Subtítulo */}
             <Typography variant="h4" className={`mb-1 ${textColor}`}>
-                Registro de Gastos
+                Registro de Ingresos
             </Typography>
             <Typography variant="paragraph" className={`mb-2 ${subTextColor}`}>
-                Completa el formulario para registrar un nuevo gasto
+                Completa el formulario para registrar un nuevo ingreso
             </Typography>
             <hr className="my-2 border-gray-800" />
 
@@ -191,4 +133,4 @@ const ExpensesRegister = ({ darkMode }) => {
     );
 };
 
-export default ExpensesRegister;
+export default IncomeRegister;

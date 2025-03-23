@@ -12,12 +12,12 @@ import { jwtDecode } from "jwt-decode";
 import PropTypes from 'prop-types';
 import apiService from "../../service/ApiService";
 
-export default function ExpensesDetails({ darkMode }) {
-    ExpensesDetails.propTypes = {
+export default function NotesDetails({ darkMode }) {
+    NotesDetails.propTypes = {
         darkMode: PropTypes.bool.isRequired, // O PropTypes.bool si no es obligatorio
     };
 
-    const { expensesId } = useParams(); // Obtener el ID del usuario desde la URL
+    const { noteId } = useParams(); // Obtener el ID del usuario desde la URL
     const [token] = useState(localStorage.getItem("token")); // Estado para rastrear el token
     const [moduleData, setModuleData] = useState(null);
     const bgColor = darkMode ? "bg-gray-900" : "bg-white";
@@ -29,10 +29,10 @@ export default function ExpensesDetails({ darkMode }) {
     const userId = decodedToken.id;
 
     useEffect(() => {
-        apiService.get(`${process.env.REACT_APP_API_URL}${process.env.REACT_APP_API_PREFIX}/usuarios/${userId}/expenses/${expensesId}`, null, true)
+        apiService.get(`${process.env.REACT_APP_API_URL}${process.env.REACT_APP_API_PREFIX}/usuarios/${userId}/notes/${noteId}`, null, true)
             .then(response => setModuleData(response.data))
             .catch(error => console.log("Error fetching data:", error))
-    }, [userId, expensesId]);
+    }, [userId, noteId]);
 
     if (!moduleData) {
         return (
@@ -43,12 +43,8 @@ export default function ExpensesDetails({ darkMode }) {
 
     // Definir los campos que queremos mostrar dinámicamente
     const fieldsToDisplay = [
-        { label: "Banco o Entidad", key: "bankOrEntity" },
-        { label: "Descripcion", key: "description" },
-        { label: "Cantidad", key: "amount" },
-        { label: "Fecha de pago", key: "paymentDate" },
-        { label: "Categoria", key: "category", format: (value) => value.name },
-        { label: "Estado del pago", key: "paymentStatus", format: (value) => (value ? "Pagado" : "Pendiente") },
+        { label: "Fuente de ingreso", key: "title" },
+        { label: "Descripcion", key: "content" },
         { label: "Fecha y hora de creación", key: "createAt" },
     ];
 
@@ -87,12 +83,12 @@ export default function ExpensesDetails({ darkMode }) {
             ),
         },
         {
-            name: "Gastos",
-            route: "/expenses",
+            name: "Notas",
+            route: "/notes",
         },
         {
             name: "Detalle",
-            route: `/expenses/details/${expensesId}`,
+            route: `/notes/details/${noteId}`,
         }
     ];
 
@@ -101,10 +97,10 @@ export default function ExpensesDetails({ darkMode }) {
             {/* Breadcrumbs */}
             <Breadcrumbs darkMode={darkMode} paths={breadcrumbsPaths} />
             <Typography variant="h4" className={`mb-1 ${textColor}`}>
-                Gasto
+                Nota
             </Typography>
             <Typography variant="paragraph" className={`mb-2 ${subTextColor}`}>
-                Detalle del gasto registrado
+                Detalle de la nota registrada
             </Typography>
             <hr className="my-2 border-gray-800" />
             <div className={`${bgColor} max-h-screen grid grid-cols-12 items-center justify-center m-1`}>
@@ -118,17 +114,17 @@ export default function ExpensesDetails({ darkMode }) {
                         >
                             <img
                                 size="lg"
-                                src="/icons/PFL.png"
+                                src="/icons/NONE.png"
                                 alt="usuario"
                                 className="mt-0 ml-10 mb-2"
                             />
                             <div className="flex w-full flex-col gap-0.5">
                                 <div className="flex items-center justify-between">
                                     <Typography variant="h5" className="text-blue-gray dark:text-gray-300">
-                                        Gasto
+                                        Nota
                                     </Typography>
                                 </div>
-                                <Typography className="text-blue-gray dark:text-gray-300">{expensesId}</Typography>
+                                <Typography className="text-blue-gray dark:text-gray-300">{noteId}</Typography>
                             </div>
                         </CardHeader>
                         <CardBody className="ml-12 mb-10 mr-10 mt-4 p-0">

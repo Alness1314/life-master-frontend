@@ -7,12 +7,12 @@ import { PlusIcon } from "@heroicons/react/24/solid"; // Íconos de Heroicons
 import Breadcrumbs from "../../components/Breadcrumbs"; // Importa el componente Breadcrumbs
 import { jwtDecode } from "jwt-decode";
 import apiService from "../../service/ApiService";
-import { getColumns } from "./ExpensesColumnsTable"
+import { getColumns } from "./IncomesTableColums"
 import PropTypes from 'prop-types';
 
-export default function Expenses({ darkMode }) {
+export default function Incomes({ darkMode }) {
 
-    Expenses.propTypes = {
+    Incomes.propTypes = {
         darkMode: PropTypes.bool.isRequired, // O PropTypes.bool si no es obligatorio
     };
 
@@ -32,7 +32,7 @@ export default function Expenses({ darkMode }) {
 
     // Función para obtener los datos del endpoint
     const fetchDataAxios = (id) => {
-        apiService.get(`${process.env.REACT_APP_API_URL}${process.env.REACT_APP_API_PREFIX}/usuarios/${id}/expenses`, null)
+        apiService.get(`${process.env.REACT_APP_API_URL}${process.env.REACT_APP_API_PREFIX}/usuarios/${id}/income`, null)
             .then(response => setData(response.data))
             .catch(error => setError(error.message))
     }
@@ -46,7 +46,7 @@ export default function Expenses({ darkMode }) {
 
     // Funciones para manejar acciones
     const handleDetails = (id) => {
-        navigate(`/expenses/details/${id}`);
+        navigate(`/incomes/details/${id}`);
     };
 
     const handleUpdate = (id) => {
@@ -67,7 +67,7 @@ export default function Expenses({ darkMode }) {
 
         if (result.isConfirmed) {
 
-            apiService.delete(`${process.env.REACT_APP_API_URL}${process.env.REACT_APP_API_PREFIX}/usuarios/${userId}/expenses/${id}`)
+            apiService.delete(`${process.env.REACT_APP_API_URL}${process.env.REACT_APP_API_PREFIX}/usuarios/${userId}/income/${id}`)
                 .then(response => {
                     if (response.data) {
                         SweetAlert2({
@@ -91,8 +91,8 @@ export default function Expenses({ darkMode }) {
     };
 
     // Función para redirigir al formulario de registro
-    const handleAddMeasurementSystem = () => {
-        navigate("/expenses/register");
+    const handleAdd = () => {
+        navigate("/incomes/register");
     };
 
     // Pasar las funciones correctamente
@@ -115,8 +115,8 @@ export default function Expenses({ darkMode }) {
             ),
         },
         {
-            name: "Gastos",
-            route: "/expenses",
+            name: "Ingresos",
+            route: "/incomes",
         },
     ];
 
@@ -125,10 +125,10 @@ export default function Expenses({ darkMode }) {
             {/* Breadcrumbs */}
             <Breadcrumbs darkMode={darkMode} paths={breadcrumbsPaths} />
             <Typography variant="h4" className={`mb-1 ${textColor}`}>
-                Gastos
+                Ingresos
             </Typography>
             <Typography variant="paragraph" className={`mb-2 ${subTextColor}`}>
-                Administra tus gastos de manera efectiva
+                Administra tus ingresos de manera efectiva
             </Typography>
             <hr className="my-2 border-gray-800" />
 
@@ -137,7 +137,7 @@ export default function Expenses({ darkMode }) {
                 <Button
                     color="indigo"
                     className="flex items-center gap-2"
-                    onClick={handleAddMeasurementSystem}
+                    onClick={handleAdd}
                 >
                     <PlusIcon className="h-5 w-5" />
                     Registrar

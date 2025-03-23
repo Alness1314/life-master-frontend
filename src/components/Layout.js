@@ -3,7 +3,7 @@ import { Sidebar } from "./Sidebar";
 import { NavbarComponent } from "./Navbar";
 import { useNavigate } from "react-router-dom";
 import { AuthContext } from "../context/AuthContext";
-import { UserCircleIcon, Cog6ToothIcon, PowerIcon } from "@heroicons/react/24/solid";
+import { UserCircleIcon, PowerIcon } from "@heroicons/react/24/solid";
 import { Spinner } from "@material-tailwind/react";
 
 export function Layout({ children, darkMode, toggleDarkMode, onLogout }) {
@@ -33,11 +33,6 @@ export function Layout({ children, darkMode, toggleDarkMode, onLogout }) {
       onClick: handleOpenProfileDialog,
     },
     {
-      label: "Editar perfil",
-      icon: Cog6ToothIcon,
-      onClick: () => console.log("Editar perfil"),
-    },
-    {
       label: "Cerrar sesión",
       icon: PowerIcon,
       onClick: () => {
@@ -59,6 +54,10 @@ export function Layout({ children, darkMode, toggleDarkMode, onLogout }) {
           darkMode={darkMode}
           toggleDarkMode={toggleDarkMode}
           onCloseSidebar={handleCloseSidebar}
+          onLogout={() => {
+            onLogout();
+            navigate("/");
+          }}
         />
       </div>
 
