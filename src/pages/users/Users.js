@@ -6,8 +6,15 @@ import SweetAlert2 from '../../components/SweetAlert2';
 import { EyeIcon, PencilSquareIcon, TrashIcon, PlusIcon } from "@heroicons/react/24/solid"; // Íconos de Heroicons
 import Breadcrumbs from "../../components/Breadcrumbs"; // Importa el componente Breadcrumbs
 import EditUser from "./EditUsers"; // Importa el componente EditUser
+import PropTypes from 'prop-types';
 
 export default function Users({ darkMode }) {
+
+  Users.propTypes = {
+    darkMode: PropTypes.bool.isRequired, // O PropTypes.bool si no es obligatorio
+  };
+
+
   const [token, setToken] = useState(localStorage.getItem("token")); // Estado para rastrear el token
   const [data, setData] = useState([]); // Estado para los datos
   const [loading, setLoading] = useState(true); // Estado para el indicador de carga
@@ -76,12 +83,12 @@ export default function Users({ darkMode }) {
     {
       header: "Verificado",
       accessorKey: "verified", // Accede a la lista de perfiles
-      cell: ({ getValue }) => (getValue() ? "Si" :  "No"),
+      cell: ({ getValue }) => (getValue() ? "Si" : "No"),
     },
     {
       header: "Estado",
       accessorKey: "erased",
-      cell: ({ getValue }) => (getValue() ? "Inactivo" :  "Activo"), // Formatear el estado
+      cell: ({ getValue }) => (getValue() ? "Inactivo" : "Activo"), // Formatear el estado
     },
     {
       header: "Fecha de Creación",
@@ -201,18 +208,22 @@ export default function Users({ darkMode }) {
     <div className="p-0 m-0 h-[calc(100vh-100px)] overflow-hidden overflow-y-auto overflow-x-auto">
       {/* Breadcrumbs */}
       <Breadcrumbs darkMode={darkMode} paths={breadcrumbsPaths} />
-      <Typography variant="h4" className={`mb-1 ${textColor}`}>
-        Usuarios
-      </Typography>
-      <Typography variant="paragraph" className={`mb-2 ${subTextColor}`}>
-        Administra los usuarios del sistema
-      </Typography>
-      <hr className="my-2 border-gray-800" />
 
-      {/* Botón para agregar un nuevo usuario */}
-      <div className="flex justify-end mb-1 mt-4 mr-4">
+      {/* Header panel */}
+      <div className="flex justify-between items-center mb-1 mt-4 mr-4">
+        {/* Title */}
+        <div>
+          <Typography variant="h4" className={`mb-1 ${textColor}`}>
+            Usuarios
+          </Typography>
+          <Typography variant="paragraph" className={`mb-2 ${subTextColor}`}>
+            Administra los usuarios del sistema
+          </Typography>
+        </div>
+
+        {/* Botón para agregar un nuevo usuario */}
         <Button
-          color="indigo"
+          color="deep-purple"
           className="flex items-center gap-2"
           onClick={handleAddUser}
         >
@@ -221,13 +232,16 @@ export default function Users({ darkMode }) {
         </Button>
       </div>
 
+      <hr className="my-2 border-gray-800" />
+
+
       {/* Mostrar la tabla con los datos */}
       <DynamicTable
         columns={columns}
         data={data}
         loading={loading}
         error={error}
-        pageSize={6}
+        pageSize={5}
       />
 
       {/* Diálogo de edición */}
