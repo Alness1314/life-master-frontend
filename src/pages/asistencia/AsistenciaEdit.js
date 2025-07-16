@@ -29,7 +29,7 @@ const AsistenciaEdit = ({ darkMode }) => {
         if (userId) {
             const fetchUserData = async () => {
                 try {
-                    const response = await fetch(`${process.env.REACT_APP_API_URL}${process.env.REACT_APP_API_PREFIX}/usuarios/${userId}/assistance/${asistanceId}`, {
+                    const response = await fetch(`${process.env.REACT_APP_API_URL}${process.env.REACT_APP_API_PREFIX}/users/${userId}/assistance/${asistanceId}`, {
                         headers: {
                             Authorization: `Bearer ${token}`,
                         },
@@ -91,7 +91,7 @@ const AsistenciaEdit = ({ darkMode }) => {
     const handleSubmit = async (formData) => {
         try {
             // Asegurarse de que 'profile' sea un array
-            const response = await fetch(`${process.env.REACT_APP_API_URL}${process.env.REACT_APP_API_PREFIX}/usuarios/${userId}/assistance`, {
+            const response = await fetch(`${process.env.REACT_APP_API_URL}${process.env.REACT_APP_API_PREFIX}/users/${userId}/assistance`, {
                 method: 'POST',
                 headers: {
                     Authorization: `Bearer ${token}`,

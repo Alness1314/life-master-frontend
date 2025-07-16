@@ -32,7 +32,7 @@ export default function Incomes({ darkMode }) {
 
     // Función para obtener los datos del endpoint
     const fetchDataAxios = (id) => {
-        apiService.get(`${process.env.REACT_APP_API_URL}${process.env.REACT_APP_API_PREFIX}/usuarios/${id}/income`, null)
+        apiService.get(`${process.env.REACT_APP_API_URL}${process.env.REACT_APP_API_PREFIX}/users/${id}/income`, null)
             .then(response => setData(response.data))
             .catch(error => setError(error.message))
     }
@@ -67,7 +67,7 @@ export default function Incomes({ darkMode }) {
 
         if (result.isConfirmed) {
 
-            apiService.delete(`${process.env.REACT_APP_API_URL}${process.env.REACT_APP_API_PREFIX}/usuarios/${userId}/income/${id}`)
+            apiService.delete(`${process.env.REACT_APP_API_URL}${process.env.REACT_APP_API_PREFIX}/users/${userId}/income/${id}`)
                 .then(response => {
                     if (response.data) {
                         SweetAlert2({

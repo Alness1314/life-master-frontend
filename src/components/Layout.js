@@ -70,7 +70,7 @@ export function Layout({ children, darkMode, toggleDarkMode, onLogout }) {
       <div className="flex-1 flex flex-col overflow-hidden">
         {user && (
           <NavbarComponent
-            brandName="Control Volumetrico UCC"
+            brandName="Life Master"
             onToggleSidebar={() => setIsSidebarOpen(!isSidebarOpen)}
             user={user}
             menuItems={menuItemsNav}

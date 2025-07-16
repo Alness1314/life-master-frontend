@@ -32,7 +32,7 @@ export default function Vault({ darkMode }) {
 
     // Función para obtener los datos del endpoint
     const fetchDataAxios = (id) => {
-        apiService.get(`${process.env.REACT_APP_API_URL}${process.env.REACT_APP_API_PREFIX}/usuarios/${id}/vault`, null)
+        apiService.get(`${process.env.REACT_APP_API_URL}${process.env.REACT_APP_API_PREFIX}/users/${id}/vault`, null)
             .then(response => setData(response.data))
             .catch(error => setError(error.message))
     }
@@ -67,7 +67,7 @@ export default function Vault({ darkMode }) {
 
         if (result.isConfirmed) {
 
-            apiService.delete(`${process.env.REACT_APP_API_URL}${process.env.REACT_APP_API_PREFIX}/usuarios/${userId}/vault/${id}`)
+            apiService.delete(`${process.env.REACT_APP_API_URL}${process.env.REACT_APP_API_PREFIX}/users/${userId}/vault/${id}`)
                 .then(response => {
                     if (response.data) {
                         SweetAlert2({

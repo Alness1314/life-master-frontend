@@ -25,7 +25,7 @@ export default function Asistencia({ darkMode }) {
         if (!token) return;
         try {
             setLoading(true); // Activar el indicador de carga
-            const response = await fetch(`${process.env.REACT_APP_API_URL}${process.env.REACT_APP_API_PREFIX}/usuarios/${userId}/assistance`, {
+            const response = await fetch(`${process.env.REACT_APP_API_URL}${process.env.REACT_APP_API_PREFIX}/users/${userId}/assistance`, {
                 headers: { Authorization: `Bearer ${token}` },
             }); // Reemplaza con tu endpoint
             if (!response.ok) {
@@ -152,7 +152,7 @@ export default function Asistencia({ darkMode }) {
 
         if (result.isConfirmed) {
             try {
-                const response = await fetch(`${process.env.REACT_APP_API_URL}${process.env.REACT_APP_API_PREFIX}/usuarios/${userId}/assistance/${id}`, {
+                const response = await fetch(`${process.env.REACT_APP_API_URL}${process.env.REACT_APP_API_PREFIX}/users/${userId}/assistance/${id}`, {
                     method: "DELETE",
                     headers: {
                         Authorization: `Bearer ${token}`,

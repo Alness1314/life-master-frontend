@@ -43,11 +43,12 @@ const Dashboard = ({ darkMode }) => {
         });
         const dataModulesL2 = await response.json();
         const sortedRootModules = dataModulesL2
-          .map(({ name, route, iconName }) => ({
+          .map(({ name, route, iconName, description }) => ({
             type: "item",
             label: name,
             icon: iconName,
             path: route, // Asegúrate de que `route` sea la propiedad correcta
+            description: description
           }))
           .sort((a, b) => a.label.localeCompare(b.label));
 

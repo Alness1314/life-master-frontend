@@ -29,7 +29,7 @@ export default function ExpensesDetails({ darkMode }) {
     const userId = decodedToken.id;
 
     useEffect(() => {
-        apiService.get(`${process.env.REACT_APP_API_URL}${process.env.REACT_APP_API_PREFIX}/usuarios/${userId}/expenses/${expensesId}`, null, true)
+        apiService.get(`${process.env.REACT_APP_API_URL}${process.env.REACT_APP_API_PREFIX}/users/${userId}/expenses/${expensesId}`, null, true)
             .then(response => setModuleData(response.data))
             .catch(error => console.log("Error fetching data:", error))
     }, [userId, expensesId]);

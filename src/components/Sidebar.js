@@ -31,11 +31,11 @@ export function Sidebar({
       <Card
         className={`h-[calc(100vh-2rem)] w-full max-w-[20rem] p-4 shadow-xl shadow-blue-gray-900/0 flex flex-col bg-white dark:bg-gray-900`}
       >
-        <div className="mb-2 flex items-center gap-4 p-4">
+        <div className="mb-2 flex items-center gap-4 p-0">
           <img
             src={brandLogo}
             alt="brand"
-            className="h-12 w-19"
+            className="h-13 w-52 p-0 m-0"
           />
         </div>
         <hr className={`my-2 ${darkMode ? "border-gray-800" : "border-gray-200"}`} />

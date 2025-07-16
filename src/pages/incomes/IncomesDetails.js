@@ -29,7 +29,7 @@ export default function IncomesDetails({ darkMode }) {
     const userId = decodedToken.id;
 
     useEffect(() => {
-        apiService.get(`${process.env.REACT_APP_API_URL}${process.env.REACT_APP_API_PREFIX}/usuarios/${userId}/income/${incomeId}`, null, true)
+        apiService.get(`${process.env.REACT_APP_API_URL}${process.env.REACT_APP_API_PREFIX}/users/${userId}/income/${incomeId}`, null, true)
             .then(response => setModuleData(response.data))
             .catch(error => console.log("Error fetching data:", error))
     }, [userId, incomeId]);

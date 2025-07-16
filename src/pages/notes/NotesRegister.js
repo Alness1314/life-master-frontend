@@ -52,7 +52,7 @@ const NotesRegister = ({ darkMode }) => {
     ];
 
     const handleSubmit = async (formData) => {
-        apiService.post(`${process.env.REACT_APP_API_URL}${process.env.REACT_APP_API_PREFIX}/usuarios/${userId}/notes`, formData, true)
+        apiService.post(`${process.env.REACT_APP_API_URL}${process.env.REACT_APP_API_PREFIX}/users/${userId}/notes`, formData, true)
             .then(response => {
                 if (response.status !== 201) {
                     throw new Error(response.data.message || 'Error al registrar la nota');

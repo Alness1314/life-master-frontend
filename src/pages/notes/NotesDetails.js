@@ -29,7 +29,7 @@ export default function NotesDetails({ darkMode }) {
     const userId = decodedToken.id;
 
     useEffect(() => {
-        apiService.get(`${process.env.REACT_APP_API_URL}${process.env.REACT_APP_API_PREFIX}/usuarios/${userId}/notes/${noteId}`, null, true)
+        apiService.get(`${process.env.REACT_APP_API_URL}${process.env.REACT_APP_API_PREFIX}/users/${userId}/notes/${noteId}`, null, true)
             .then(response => setModuleData(response.data))
             .catch(error => console.log("Error fetching data:", error))
     }, [userId, noteId]);

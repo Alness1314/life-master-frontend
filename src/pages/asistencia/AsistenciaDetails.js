@@ -27,7 +27,7 @@ export default function AsistenciaDetails({ darkMode }) {
         // Simulando la obtención de datos desde una API
         const fetchData = async () => {
             try {
-                const response = await fetch(`${process.env.REACT_APP_API_URL}${process.env.REACT_APP_API_PREFIX}/usuarios/${userId}/assistance/${asistanceId}`, {
+                const response = await fetch(`${process.env.REACT_APP_API_URL}${process.env.REACT_APP_API_PREFIX}/users/${userId}/assistance/${asistanceId}`, {
                     headers: { Authorization: `Bearer ${token}` },
                 });
                 const data = await response.json();

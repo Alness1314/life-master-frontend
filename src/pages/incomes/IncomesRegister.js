@@ -52,7 +52,7 @@ const IncomeRegister = ({ darkMode }) => {
     ];
 
     const handleSubmit = async (formData) => {
-        apiService.post(`${process.env.REACT_APP_API_URL}${process.env.REACT_APP_API_PREFIX}/usuarios/${userId}/income`, formData, true)
+        apiService.post(`${process.env.REACT_APP_API_URL}${process.env.REACT_APP_API_PREFIX}/users/${userId}/income`, formData, true)
             .then(response => {
                 if (response.status !== 201) {
                     throw new Error(response.data.message || 'Error al registrar el ingreso');

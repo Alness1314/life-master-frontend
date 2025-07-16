@@ -71,7 +71,7 @@ const ExpensesRegister = ({ darkMode }) => {
     }, []);
 
     const handleSubmit = async (formData) => {
-        apiService.post(`${process.env.REACT_APP_API_URL}${process.env.REACT_APP_API_PREFIX}/usuarios/${userId}/expenses`, formData, true)
+        apiService.post(`${process.env.REACT_APP_API_URL}${process.env.REACT_APP_API_PREFIX}/users/${userId}/expenses`, formData, true)
             .then(response => {
                 if (response.status !== 201) {
                     throw new Error(response.data.message || 'Error al registrar el gasto');

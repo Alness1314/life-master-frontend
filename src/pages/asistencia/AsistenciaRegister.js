@@ -66,7 +66,7 @@ const AsistenciaRegister = ({ darkMode }) => {
     const handleSubmit = async (formData) => {
         try {
             // Asegurarse de que 'profile' sea un array
-            const response = await fetch(`${process.env.REACT_APP_API_URL}${process.env.REACT_APP_API_PREFIX}/usuarios/${userId}/assistance`, {
+            const response = await fetch(`${process.env.REACT_APP_API_URL}${process.env.REACT_APP_API_PREFIX}/users/${userId}/assistance`, {
                 method: 'POST',
                 headers: {
                     Authorization: `Bearer ${token}`,

@@ -32,7 +32,7 @@ export default function Notes({ darkMode }) {
 
     // Función para obtener los datos del endpoint
     const fetchDataAxios = (id) => {
-        apiService.get(`${process.env.REACT_APP_API_URL}${process.env.REACT_APP_API_PREFIX}/usuarios/${id}/notes`, null)
+        apiService.get(`${process.env.REACT_APP_API_URL}${process.env.REACT_APP_API_PREFIX}/users/${id}/notes`, null)
             .then(response => setData(response.data))
             .catch(error => setError(error.message))
     }
@@ -67,7 +67,7 @@ export default function Notes({ darkMode }) {
 
         if (result.isConfirmed) {
 
-            apiService.delete(`${process.env.REACT_APP_API_URL}${process.env.REACT_APP_API_PREFIX}/usuarios/${userId}/notes/${id}`)
+            apiService.delete(`${process.env.REACT_APP_API_URL}${process.env.REACT_APP_API_PREFIX}/users/${userId}/notes/${id}`)
                 .then(response => {
                     if (response.data) {
                         SweetAlert2({
