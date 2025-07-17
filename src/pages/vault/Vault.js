@@ -124,18 +124,22 @@ export default function Vault({ darkMode }) {
         <div className="p-0 m-0 h-[calc(100vh-100px)] overflow-hidden overflow-y-auto overflow-x-auto">
             {/* Breadcrumbs */}
             <Breadcrumbs darkMode={darkMode} paths={breadcrumbsPaths} />
-            <Typography variant="h4" className={`mb-1 ${textColor}`}>
-                Bobeda
-            </Typography>
-            <Typography variant="paragraph" className={`mb-2 ${subTextColor}`}>
-                Administra tus contraseñas de manera efectiva
-            </Typography>
-            <hr className="my-2 border-gray-800" />
 
-            {/* Botón para agregar un nuevo sistema de medición */}
-            <div className="flex justify-end mb-1 mt-4 mr-4">
+            {/* Header panel */}
+            <div className="flex justify-between items-center mb-1 mt-4 mr-4">
+                {/* Title */}
+                <div>
+                    <Typography variant="h4" className={`mb-1 ${textColor}`}>
+                        Bóveda
+                    </Typography>
+                    <Typography variant="paragraph" className={`mb-2 ${subTextColor}`}>
+                        Lleva el control de tus contraseñas.
+                    </Typography>
+                </div>
+
+                {/* Botón para agregar un nuevo usuario */}
                 <Button
-                    color="indigo"
+                    color="deep-purple"
                     className="flex items-center gap-2"
                     onClick={handleAdd}
                 >
@@ -143,6 +147,8 @@ export default function Vault({ darkMode }) {
                     Registrar
                 </Button>
             </div>
+
+            <hr className="my-2 border-gray-800" />
 
             {/* Mostrar la tabla con los datos */}
             <DynamicTable

@@ -106,7 +106,7 @@ const DynamicTable = ({ columns, data, loading, error, onDetails, onUpdate, onDe
                 key={i}
                 variant={i === table.getState().pagination.pageIndex ? "filled" : "text"}
                 onClick={() => table.setPageIndex(i)}
-                className="bg-indigo-400 dark:bg-indigo-200 text-white dark:text-gray-900"
+                className="bg-deep-purple-400 dark:bg-deep-purple-200 text-white dark:text-gray-900"
               >
                 {i + 1}
               </Button>

@@ -108,19 +108,19 @@ export default function Asistencia({ darkMode }) {
                 <div className="flex gap-2">
                     <IconButton
                         onClick={() => handleDetails(row.original.id)}
-                        className="bg-indigo-400 dark:bg-indigo-200"
+                        className="bg-deep-purple-400 dark:bg-deep-purple-200"
                     >
                         <EyeIcon className="h-5 w-5 text-white dark:text-gray-900" />
                     </IconButton>
                     <IconButton
                         onClick={() => handleUpdate(row.original.id)}
-                        className="bg-indigo-400 dark:bg-indigo-200"
+                        className="bg-deep-purple-400 dark:bg-deep-purple-200"
                     >
                         <PencilSquareIcon className="h-5 w-5 text-white dark:text-gray-900" />
                     </IconButton>
                     <IconButton
                         onClick={() => handleDelete(row.original.id)}
-                        className="bg-indigo-400 dark:bg-indigo-200"
+                        className="bg-deep-purple-400 dark:bg-deep-purple-200"
                     >
                         <TrashIcon className="h-5 w-5 text-white dark:text-gray-900" />
                     </IconButton>
@@ -225,7 +225,7 @@ export default function Asistencia({ darkMode }) {
             {/* Botón para agregar un nuevo sistema de medición */}
             <div className="flex justify-end mb-1 mt-4 mr-4">
                 <Button
-                    color="indigo"
+                    color="deep-purple"
                     className="flex items-center gap-2"
                     onClick={handleAddMeasurementSystem}
                 >

@@ -26,6 +26,14 @@ export function Sidebar({
     ? "hover:bg-opacity-20 hover:text-white"
     : "hover:bg-gray-300 hover:text-black";
 
+  const focusStyles = darkMode
+    ? "focus:bg-opacity-20 focus:text-white"
+    : "focus:bg-gray-300 focus:text-black";
+
+  const activeStyles = darkMode
+    ? "active:bg-opacity-20 active:text-white"
+    : "active:bg-gray-300 active:text-black";
+
   return (
     <div className={`h-screen flex items-center justify-center bg-white dark:bg-gray-900 shadow-xl shadow-blue-gray-500/10 dark:shadow-blue-gray-500/5 border border-black/15`}>
       <Card
@@ -43,7 +51,7 @@ export function Sidebar({
           {menuItems.map((item, index) => (
             <ListItem
               key={index}
-              className={`${textColor} ${hoverStyles} focus:${hoverStyles} active:${hoverStyles}`}
+              className={`${textColor} ${hoverStyles} ${focusStyles} ${activeStyles}`}
               onClick={() => {
                 navigate(item.path); // Navegar a la ruta
                 onCloseSidebar(); // Cerrar la barra lateral en modo móvil
@@ -54,7 +62,7 @@ export function Sidebar({
                   src={darkMode ? `/icons/${item.icon}.svg` : `/icons/${item.icon}_dark.svg`}
                   alt={item.label}
                   color={iconColor}
-                  className={`h-5 w-5 `}
+                  className={`h-5 w-5` }
                 />
               </ListItemPrefix>
               {item.label}

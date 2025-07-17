@@ -6,70 +6,64 @@ import {
   Typography,
   Button,
 } from "@material-tailwind/react";
-import { useNavigate, useLocation } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import Breadcrumbs from "../components/Breadcrumbs"; // Importa el componente Breadcrumbs
 import { AuthContext } from "../context/AuthContext";
+import apiService from "../service/ApiService";
+import PropTypes from 'prop-types';
 
 let cachedModuleL3Options = null;
 
 export default function Settings({ darkMode }) {
-  const [token] = useState(localStorage.getItem("token")); // Estado para rastrear el token
+
+  Settings.propTypes = {
+    darkMode: PropTypes.bool.isRequired,
+  };
+
   const { user } = useContext(AuthContext);
   const [moduleL3Options, setModuleL3Options] = useState([]);
-  const [loading, setLoading] = useState(true); // Estado para manejar la carga de datos
   const [currentCatalog, setCurrentCatalog] = useState(null);
-  const location = useLocation();
   const navigate = useNavigate();
   const bgColor = darkMode ? "bg-gray-800 border-gray-700" : "bg-gray-100 border-gray-200";
   const iconRoute = "/icons/";
   const iconExt = ".png";
 
-
-
-  const [data, setData] = useState([]); // Estado para los datos
-  const [error, setError] = useState(null); // Estado para manejar errores
-
-
   const textColor = darkMode ? "text-white" : "text-gray-900";
   const subTextColor = darkMode ? "text-blue-gray-200" : "text-blue-grey";
 
+  const sortedRootModules = (modules) => {
+    return modules
+      .map((module) => ({
+        type: "item",
+        label: module.name,
+        icon: module.iconName,
+        description: module.description,
+        path: module.route,
+      }))
+      .sort((a, b) => a.label.localeCompare(b.label));
+  };
+
   //obtener los modulos desde enpoint
   useEffect(() => {
-    const fetchProfiles = async () => {
+    const fetchSettingsModules = () => {
       // Si los datos ya están en memoria, no hacemos la solicitud
       if (cachedModuleL3Options) {
-        console.log("modulos lv 3: " + cachedModuleL3Options);
         setModuleL3Options(cachedModuleL3Options);
-        setLoading(false);
         return;
       }
 
-      try {
-        const response = await fetch(`${process.env.REACT_APP_API_URL}${process.env.REACT_APP_API_PREFIX}/modules/all?profile=${user.idProfile}&level=settings`, {
-          headers: { Authorization: `Bearer ${token}` },
-        });
-        const dataModulesL2 = await response.json();
-        const sortedRootModules = dataModulesL2
-          .map(({ name, route, iconName }) => ({
-            type: "item",
-            label: name,
-            icon: iconName,
-            path: route, // Asegúrate de que `route` sea la propiedad correcta
-          }))
-          .sort((a, b) => a.label.localeCompare(b.label));
+      apiService.get(`${process.env.REACT_APP_API_URL}${process.env.REACT_APP_API_PREFIX}/modules/all?profile=${user.idProfile}&level=settings`, null, true)
+        .then(response => {
+          if (response.status >= 200 && response.status < 300) {
+            const mappedModules = sortedRootModules(response.data);
+            setModuleL3Options(mappedModules);
+          }
+        })
+        .catch(error => console.error('Error fetching profiles:', error))
+    }
 
-        // Almacenamos los datos en memoria
-        cachedModuleL3Options = sortedRootModules;
-        setModuleL3Options(sortedRootModules);
-      } catch (error) {
-        console.error('Error fetching profiles:', error);
-      } finally {
-        setLoading(false); // Finalizamos la carga
-      }
-    };
-
-    fetchProfiles();
-  }, [token, user]);
+    fetchSettingsModules();
+  }, [user]);
 
   const handleCatalogClick = (catalog) => {
     setCurrentCatalog(catalog);
@@ -81,28 +75,11 @@ export default function Settings({ darkMode }) {
     navigate("/");
   };
 
-  const getPageTitleAndDescription = () => {
-    const currentPath = location.pathname;
-    const catalog = moduleL3Options.find(module => module.path === currentPath);
-    return {
-      title: catalog ? catalog.label : "Catálogos",
-      description: catalog ? catalog.description : "Selecciona un módulo para comenzar",
-    };
-  };
-
-  const { title, description } = getPageTitleAndDescription();
-
-
-  // Función para redirigir al formulario de registro
-  const handleAdd = () => {
-    navigate("/users/register");
-  };
-
   // Generar las rutas para el Breadcrumbs
   const breadcrumbsPaths = [
     {
-      name: "Home",
-      route: "/Dashboard",
+      name: "Configuración",
+      route: "/settings",
       icon: (
         <svg
           xmlns="http://www.w3.org/2000/svg"
@@ -114,23 +91,27 @@ export default function Settings({ darkMode }) {
         </svg>
       ),
     },
-    {
-      name: "Configuración",
-      route: "/settings",
-    },
     ...(currentCatalog ? [{ name: currentCatalog.label, route: currentCatalog.path }] : []),
   ];
+
 
   return (
     <div className="p-0 m-0 h-[calc(100vh-100px)] overflow-hidden overflow-y-auto overflow-x-auto">
       {/* Breadcrumbs */}
       <Breadcrumbs darkMode={darkMode} paths={breadcrumbsPaths} />
-      <Typography variant="h4" className={`mb-1 ${textColor}`}>
-      Configuración
-      </Typography>
-      <Typography variant="paragraph" className={`mb-2 ${subTextColor}`}>
-        Administra las configuraciones generales
-      </Typography>
+      {/* Header panel */}
+      <div className="flex justify-between items-center mb-1 mt-4 mr-4">
+        {/* Title */}
+        <div>
+          <Typography variant="h4" className={`mb-1 ${textColor}`}>
+            Configuración
+          </Typography>
+          <Typography variant="paragraph" className={`mb-2 ${subTextColor}`}>
+            Administra las configuraciones generales
+          </Typography>
+        </div>
+      </div>
+
       <hr className="my-2 border-gray-800" />
 
       {/* Mostrar la tabla con los datos */}

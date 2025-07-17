@@ -9,11 +9,19 @@ import {
 } from "@material-tailwind/react";
 import { AuthContext } from "../context/AuthContext";
 import Breadcrumbs from "../components/Breadcrumbs"; // Importa el componente Breadcrumbs corregido
+import PropTypes from 'prop-types';
+import apiService from "../service/ApiService";
 
 // Estado global simulado (puedes usar Context API o Redux en su lugar)
 let cachedModuleL2Options = null;
 
 const Dashboard = ({ darkMode }) => {
+
+  Dashboard.propTypes = {
+    darkMode: PropTypes.bool.isRequired,
+  };
+
+
   const { user } = useContext(AuthContext);
   const navigate = useNavigate();
   const location = useLocation();
@@ -24,46 +32,40 @@ const Dashboard = ({ darkMode }) => {
   const iconRoute = "/icons/";
   const iconExt = ".png";
   const [moduleL2Options, setModuleL2Options] = useState([]);
-  const [loading, setLoading] = useState(true); // Estado para manejar la carga de datos
-  const [token] = useState(localStorage.getItem("token"));
+
+  const sortedRootModules = (modules) => {
+    return modules
+      .map((module) => ({
+        type: "item",
+        label: module.name,
+        icon: module.iconName,
+        description: module.description,
+        path: module.route,
+      }))
+      .sort((a, b) => a.label.localeCompare(b.label));
+  };
 
   useEffect(() => {
-    const fetchProfiles = async () => {
+    const fetchModules = () => {
       // Si los datos ya están en memoria, no hacemos la solicitud
       if (cachedModuleL2Options) {
-        console.log("modulos lv 2: " + cachedModuleL2Options);
         setModuleL2Options(cachedModuleL2Options);
-        setLoading(false);
         return;
       }
 
-      try {
-        const response = await fetch(`${process.env.REACT_APP_API_URL}${process.env.REACT_APP_API_PREFIX}/modules/all?profile=${user.idProfile}&level=menu`, {
-          headers: { Authorization: `Bearer ${token}` },
-        });
-        const dataModulesL2 = await response.json();
-        const sortedRootModules = dataModulesL2
-          .map(({ name, route, iconName, description }) => ({
-            type: "item",
-            label: name,
-            icon: iconName,
-            path: route, // Asegúrate de que `route` sea la propiedad correcta
-            description: description
-          }))
-          .sort((a, b) => a.label.localeCompare(b.label));
-
-        // Almacenamos los datos en memoria
-        cachedModuleL2Options = sortedRootModules;
-        setModuleL2Options(sortedRootModules);
-      } catch (error) {
-        console.error('Error fetching profiles:', error);
-      } finally {
-        setLoading(false); // Finalizamos la carga
-      }
+      apiService.get(`${process.env.REACT_APP_API_URL}${process.env.REACT_APP_API_PREFIX}/modules/all?profile=${user.idProfile}&level=menu`, null, true)
+        .then(response => {
+          if (response.status >= 200 && response.status < 300) {
+            const mappedModules = sortedRootModules(response.data);
+            cachedModuleL2Options = mappedModules
+            setModuleL2Options(mappedModules);
+          }
+        })
+        .catch(error => console.error('Error fetching profiles:', error))
     };
 
-    fetchProfiles();
-  }, [token, user]);
+    fetchModules();
+  }, [user]);
 
   const handleCatalogClick = (catalog) => {
     setCurrentCatalog(catalog);
@@ -109,12 +111,19 @@ const Dashboard = ({ darkMode }) => {
     <div className="p-0 m-0 h-[calc(100vh-100px)] overflow-hidden overflow-y-auto overflow-x-auto">
       {/* Breadcrumbs */}
       <Breadcrumbs darkMode={darkMode} paths={breadcrumbsPaths} />
-      <Typography variant="h4" className={`mb-1 ${textColor}`}>
-        {title}
-      </Typography>
-      <Typography variant="paragraph" className={`mb-2 ${subTextColor}`}>
-        {description}
-      </Typography>
+
+      {/* Header panel */}
+      <div className="flex justify-between items-center mb-1 mt-4 mr-4">
+        {/* Title */}
+        <div>
+          <Typography variant="h4" className={`mb-1 ${textColor}`}>
+            {title}
+          </Typography>
+          <Typography variant="paragraph" className={`mb-2 ${subTextColor}`}>
+            {description}
+          </Typography>
+        </div>
+      </div>
       <hr className="my-2 border-gray-800" />
 
       {currentCatalog ? (

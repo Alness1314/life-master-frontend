@@ -2,7 +2,7 @@ import React from "react";
 import { Input } from "@material-tailwind/react";
 
 const MaterialInput = ({ mode = false, size = "lg", type = "text", label, className = "", ...props }) => {
-  const color = mode ? "indigo" : "indigo";
+  const color = mode ? "deep-purple" : "deep-purple";
   
   return (
     <Input

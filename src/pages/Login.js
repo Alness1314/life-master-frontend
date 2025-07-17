@@ -4,38 +4,52 @@ import Footer from "./Footer";
 import MaterialButton from "../components/MaterialButton";
 import MaterialInput from "../components/MaterialInput";
 import MaterialTypography from "../components/MaterialTypography";
+import apiService from "../service/ApiService"
+import Swal from 'sweetalert2';
+import SweetAlert2 from '../components/SweetAlert2';
+import PropTypes from "prop-types";
 
 function Login({ darkMode, toggleDarkMode, onLogin }) {
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
   const [error, setError] = useState("");
 
-  const handleLogin = async (e) => {
+  const loginEx = (e) => {
     e.preventDefault();
-
-    try {
-      const response = await fetch(`${process.env.REACT_APP_API_URL}${process.env.REACT_APP_API_PREFIX}/auth`, {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({ username, password }),
-      });
-
-      const data = await response.json();
-
-      if (response.ok) {
-        localStorage.setItem("token", data.token); // Guardar token en localStorage
-        localStorage.setItem("user", username); // Guardar nombre de usuario en localStorage
-        setError(""); // Limpiar errores
-        onLogin(data.token); // Llamar a onLogin con el token
-      } else {
-        setError(data.message || "Error al iniciar sesión");
+    SweetAlert2({
+      title: 'Cargando...',
+      text: 'Por favor, espera.',
+      allowOutsideClick: false,
+      didOpen: (modal) => {
+        Swal.showLoading(); // Esta es la forma correcta
       }
-    } catch (error) {
-      setError("Error de conexión con el servidor");
-    }
-  };
+    });
+    apiService.post(`${process.env.REACT_APP_API_URL}${process.env.REACT_APP_API_PREFIX}/auth`, { username, password }, false)
+      .then(response => {
+        Swal.close();
+        if (response.status === 202) {
+          localStorage.setItem("token", response.data.token); // Guardar token en localStorage
+          localStorage.setItem("user", username); // Guardar nombre de usuario en localStorage
+          setError(""); // Limpiar errores
+          onLogin(response.data.token); // Llamar a onLogin con el token
+        } else if (response.status === 401) {
+          setError("Usuario o contraseña incorrectos.");
+        } else {
+          setError(response.data.message || "Error al iniciar sesión.");
+        }
+      })
+      .catch(error => {
+        Swal.close();
+        // Verificamos si el error contiene una respuesta del servidor
+        if (error.response && error.response.status === 401) {
+          setError("Usuario o contraseña incorrectos.");
+        } else if (error.response) {
+          setError(error.response.data?.message || `Error: ${error.response.status}`);
+        } else {
+          setError("Error de conexión con el servidor.");
+        }
+      })
+  }
 
   return (
     <section
@@ -53,16 +67,14 @@ function Login({ darkMode, toggleDarkMode, onLogin }) {
           checked={darkMode}
           onChange={toggleDarkMode}
           label={darkMode ? "Modo Oscuro" : "Modo Claro"}
-          color="indigo"
+          color="deep-purple"
         />
       </div>
 
       <div className="container mx-auto h-screen grid place-items-center">
         <Card
           shadow={false}
-          className={`md:px-12 md:py-10 py-8 border rounded-lg w-full max-w-md ${
-            darkMode ? "bg-gray-900/90 border-gray-800" : "bg-gray-50/90 border-gray-200"
-          }`}
+          className="md:px-12 md:py-10 py-8 border rounded-lg w-full max-w-md bg-white/90 border-gray-200 dark:bg-gray-900/90 dark:border-gray-800"
         >
           <CardHeader shadow={false} floated={false} className="text-center bg-transparent">
             <div className="flex justify-center mb-2">
@@ -87,7 +99,7 @@ function Login({ darkMode, toggleDarkMode, onLogin }) {
             </MaterialTypography>
           </CardHeader>
           <CardBody>
-            <form onSubmit={handleLogin} className="flex flex-col gap-4 md:mt-8">
+            <form onSubmit={loginEx} className="flex flex-col gap-4 md:mt-8">
               <div>
                 <MaterialInput
                   id="username"
@@ -133,9 +145,8 @@ function Login({ darkMode, toggleDarkMode, onLogin }) {
               <MaterialTypography className="text-center">
                 <a
                   href="/"
-                  className={`${
-                    darkMode ? "text-indigo-300 hover:text-indigo-200" : "text-indigo-500 hover:text-indigo-700"
-                  }`}
+                  className={`${darkMode ? "text-indigo-300 hover:text-indigo-200" : "text-indigo-500 hover:text-indigo-700"
+                    }`}
                 >
                   ¿Olvidaste tu contraseña?
                 </a>
@@ -150,5 +161,12 @@ function Login({ darkMode, toggleDarkMode, onLogin }) {
     </section>
   );
 }
+
+// Agregar validación de props
+Login.propTypes = {
+  darkMode: PropTypes.bool.isRequired,
+  toggleDarkMode: PropTypes.func,
+  onLogin: PropTypes.func
+};
 
 export default Login;

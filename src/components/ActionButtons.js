@@ -16,19 +16,19 @@ const ActionButtons = ({ id, handleDetails, handleUpdate, handleDelete }) => {
         <div className="flex gap-2">
             <IconButton
                 onClick={() => handleDetails(id)}
-                className="bg-indigo-400 dark:bg-indigo-200"
+                className="bg-deep-purple-400 dark:bg-deep-purple-200"
             >
                 <EyeIcon className="h-5 w-5 text-white dark:text-gray-900" />
             </IconButton>
             <IconButton
                 onClick={() => handleUpdate(id)}
-                className="bg-indigo-400 dark:bg-indigo-200"
+                className="bg-deep-purple-400 dark:bg-deep-purple-200"
             >
                 <PencilSquareIcon className="h-5 w-5 text-white dark:text-gray-900" />
             </IconButton>
             <IconButton
                 onClick={() => handleDelete(id)}
-                className="bg-indigo-400 dark:bg-indigo-200"
+                className="bg-deep-purple-400 dark:bg-deep-purple-200"
             >
                 <TrashIcon className="h-5 w-5 text-white dark:text-gray-900" />
             </IconButton>
