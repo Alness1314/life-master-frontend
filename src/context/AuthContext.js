@@ -1,16 +1,43 @@
 import React, { createContext, useState, useEffect } from "react";
 import { jwtDecode } from "jwt-decode";
+import apiService from "../service/ApiService"
+
 
 export const AuthContext = createContext();
 
 export function AuthProvider({ children }) {
   const [user, setUser] = useState(null);
   const [menuItems, setMenuItems] = useState([]);
-  const [dashboardModules, setDashboardModules] = useState([]);
+
   const [isModulesLoaded, setIsModulesLoaded] = useState(false);
   const [token, setToken] = useState(localStorage.getItem("token")); // Estado para rastrear el token
 
+  //verificar el token en backend
+  const verifyToken = async () => {
+    try {
+      const response = await apiService.get(`${process.env.REACT_APP_API_URL}${process.env.REACT_APP_API_PREFIX}/auth/check-session`, null, true);
+      return response.status === 202
+    } catch (error) {
+      console.error("Error verifying token:", error);
+      return false;
+    }
+  }
+
   useEffect(() => {
+    const responseVerify = verifyToken();
+
+     responseVerify
+      .then(response => {
+        console.log("Verificación:", response);
+        if (!response) {
+          clearToken()
+        }
+      })
+      .catch(error => {
+        console.error("Error en la verificación:", error);
+      });
+
+
     if (!token) return; // Si no hay token, no hacer nada
 
     const decodedToken = jwtDecode(token);
@@ -63,7 +90,7 @@ export function AuthProvider({ children }) {
   };
 
   return (
-    <AuthContext.Provider value={{ user, menuItems, dashboardModules, isModulesLoaded, updateToken, clearToken }}>
+    <AuthContext.Provider value={{ user, menuItems, isModulesLoaded, updateToken, clearToken }}>
       {children}
     </AuthContext.Provider>
   );
